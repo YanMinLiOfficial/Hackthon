@@ -3,6 +3,7 @@ node_modules/
 dist/
 coverage/
 .vite/
+*.tsbuildinfo
 
 # Local environment and secrets
 .env
