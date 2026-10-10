@@ -1,37 +1,21 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './theme.css';
 import './app.css';
-import { AppStoreProvider, useAppStore } from '../store';
+import { AppStoreProvider } from '../store';
 import { AppLayout } from './AppLayout';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProfilePlaceholder } from './pages/ProfilePlaceholder';
 import { HomePage } from '../features/journey/pages/HomePage';
+import { MapPage } from '../features/journey/pages/MapPage';
 import '../features/journey/journey.css';
 
 /** 路由表：路径为共享约定，成员页面后续在对应 feature 目录实现并在此挂载 */
 function AppRoutes() {
-  const { places, observations } = useAppStore();
-
   return (
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/map"
-          element={
-            <PlaceholderPage
-              title="地图 · 地点与时间线"
-              owner="成员 B"
-              modulePath="src/features/map/、src/features/place/"
-              milestone="M1"
-              facts={[
-                `已就绪 ${places.length} 个校园地点，每地点唯一大头针`,
-                `已就绪 ${observations.length} 条观察，按时间线归入地点`,
-                '五种状态颜色 + 图形双重编码图例；无 Key 使用本地 SVG 地图',
-              ]}
-            />
-          }
-        />
+        <Route path="/map" element={<MapPage />} />
         <Route
           path="/publish"
           element={
