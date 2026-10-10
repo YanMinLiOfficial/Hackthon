@@ -197,6 +197,8 @@
   cursor: pointer;
 }
 
+/* SVG <g> 上 outline 跨浏览器不稳定，用命中圆做清晰焦点指示；
+   焦点在容器 .map-marker 上（父元素），命中圆为子元素。 */
 .map-marker:focus-visible {
   outline: none;
 }
@@ -205,8 +207,14 @@
   fill: transparent;
 }
 
-.map-marker__hit:focus {
+.map-marker:focus .map-marker__hit {
   fill: rgba(11, 92, 173, 0.12);
+}
+
+.map-marker:focus-visible .map-marker__hit {
+  fill: rgba(11, 92, 173, 0.18);
+  stroke: var(--color-focus);
+  stroke-width: 0.9;
 }
 
 .map-marker__name {
