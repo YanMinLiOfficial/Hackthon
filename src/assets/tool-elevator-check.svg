@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="手机实测电梯能否容纳轮椅插图">
+  <rect width="480" height="320" fill="#eef0f6"/>
+  <rect x="0" y="0" width="480" height="36" fill="#4a4e8a"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">工具分享</text>
+  <rect x="160" y="60" width="160" height="230" rx="18" fill="#23262f"/>
+  <rect x="174" y="80" width="132" height="180" rx="6" fill="#dfe7f2"/>
+  <g stroke="#33414f" stroke-width="3" fill="none">
+    <rect x="196" y="120" width="70" height="60"/>
+    <path d="M196 150 h70 M231 120 v60"/>
+    <circle cx="220" cy="210" r="10"/>
+    <path d="M220 210 L246 210 L260 192 M246 210 L236 232 L262 232"/>
+  </g>
+  <text x="240" y="285" text-anchor="middle" font-size="14" fill="#dfe7f2" font-family="sans-serif">深度 ≥ 1.40 m？</text>
+  <text x="240" y="48" text-anchor="middle" font-size="18" fill="#2f3650" font-family="sans-serif">出门前用手机量电梯</text>
+</svg>

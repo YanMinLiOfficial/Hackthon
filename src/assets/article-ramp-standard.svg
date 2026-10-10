@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="轮椅坡道坡度与宽度科普插图">
+  <rect width="480" height="320" fill="#f3f0e8"/>
+  <rect x="0" y="0" width="480" height="36" fill="#8a6d3b"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">无障碍科普</text>
+  <path d="M70 250 L380 250 L240 140 L70 140 Z" fill="#d8cfb8" stroke="#a8986b" stroke-width="3"/>
+  <path d="M70 250 L380 250" stroke="#c03f3f" stroke-width="4" stroke-dasharray="10 8"/>
+  <text x="200" y="275" fill="#7a5c1e" font-size="18" font-family="sans-serif">有效宽度 ≥ 1.20 m</text>
+  <g fill="none" stroke="#2f5d8a" stroke-width="4">
+    <circle cx="150" cy="220" r="14"/>
+    <path d="M150 220 L178 220 L196 196 M178 220 L166 246 L196 246"/>
+  </g>
+  <text x="240" y="90" text-anchor="middle" fill="#5d4a1f" font-size="20" font-family="sans-serif">坡度、宽度、扶手一图读懂</text>
+</svg>

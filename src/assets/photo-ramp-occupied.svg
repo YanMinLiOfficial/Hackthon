@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="图书馆东门坡道被共享单车占用">
+  <rect width="480" height="320" fill="#e7eef5"/>
+  <rect x="0" y="0" width="480" height="36" fill="#1f6fb2"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">设施观察 · 图书馆东门</text>
+  <rect x="0" y="250" width="480" height="70" fill="#cfd8e2"/>
+  <path d="M40 250 L300 250 L220 150 L40 150 Z" fill="#b9c7d6"/>
+  <path d="M40 250 L300 250 L220 150 L40 150" fill="none" stroke="#8aa0b5" stroke-width="3"/>
+  <line x1="60" y1="160" x2="300" y2="160" stroke="#7d93a8" stroke-width="4"/>
+  <g stroke="#e07b26" stroke-width="4" fill="none">
+    <circle cx="300" cy="222" r="14"/><circle cx="360" cy="222" r="14"/>
+    <path d="M300 222 L330 190 L360 222 M330 190 L346 190 M322 202 L346 202"/>
+    <circle cx="350" cy="180" r="13"/><circle cx="408" cy="180" r="13"/>
+    <path d="M350 180 L378 150 L408 180 M378 150 L393 150"/>
+  </g>
+  <rect x="24" y="52" width="190" height="40" rx="8" fill="#fff4e0" stroke="#b26a00"/>
+  <text x="36" y="77" fill="#8a4b00" font-size="16" font-family="sans-serif">坡道被共享单车占用</text>
+</svg>

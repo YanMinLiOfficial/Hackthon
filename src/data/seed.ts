@@ -1,0 +1,524 @@
+import type {
+  AppData,
+  Observation,
+  Place,
+  Post,
+  SimulatedIdentity,
+  TimelineEvent,
+  PointRecord,
+} from '../types';
+
+import rampPhoto from '../assets/photo-ramp-occupied.svg';
+import tactilePhoto from '../assets/photo-tactile-blocked.svg';
+import restroomPhoto from '../assets/photo-restroom-ok.svg';
+import articleRampPhoto from '../assets/article-ramp-standard.svg';
+import articleTactilePhoto from '../assets/article-tactile.svg';
+import toolMapPhoto from '../assets/tool-map-compare.svg';
+import toolElevatorPhoto from '../assets/tool-elevator-check.svg';
+import experienceMetroPhoto from '../assets/experience-metro.svg';
+import elevatorPhoto from '../assets/sample-photo-elevator.svg';
+
+import { findStandard } from './standards';
+import { DEMO_ROUTES } from './demoRoutes';
+
+/** 相对当前时间生成 ISO 时间，保证“可能过期”示例在任意演示日期都成立 */
+function daysAgo(days: number, hour = 10, minute = 0): string {
+  const date = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  date.setHours(hour, minute, 0, 0);
+  return date.toISOString();
+}
+
+// --- 模拟身份（非真实账号） -------------------------------------------------
+
+const USERS = {
+  lin: { userId: 'u-lin', name: '林晓', role: 'volunteer' },
+  chen: { userId: 'u-chen', name: '陈默', role: 'volunteer' },
+  zhao: { userId: 'u-zhao', name: '赵宁', role: 'volunteer' },
+  wang: { userId: 'u-wang', name: '王老师（图书馆）', role: 'institution' },
+} as const satisfies Record<string, SimulatedIdentity>;
+
+// --- 地点（5 个，唯一大头针） ----------------------------------------------
+
+const PLACES: Place[] = [
+  {
+    id: 'place-library-east',
+    name: '图书馆东门',
+    coordinates: { x: 30, y: 26 },
+    category: '图书馆',
+    accessibilityFeatures: ['轮椅坡道', '无障碍出入口'],
+    currentStatus: 'pending',
+    lastVerifiedAt: daysAgo(2),
+    observationIds: ['obs-ramp-001'],
+  },
+  {
+    id: 'place-canteen',
+    name: '第一食堂侧门',
+    coordinates: { x: 28, y: 62 },
+    category: '食堂',
+    accessibilityFeatures: ['盲道', '无障碍出入口'],
+    currentStatus: 'community_verified',
+    lastVerifiedAt: daysAgo(19),
+    observationIds: ['obs-tactile-002'],
+  },
+  {
+    id: 'place-teaching-3',
+    name: '第三教学楼',
+    coordinates: { x: 64, y: 30 },
+    category: '教学楼',
+    accessibilityFeatures: ['无障碍卫生间', '无障碍电梯'],
+    currentStatus: 'institution_confirmed',
+    lastVerifiedAt: daysAgo(6),
+    observationIds: ['obs-restroom-003'],
+  },
+  {
+    id: 'place-gym',
+    name: '体育馆',
+    coordinates: { x: 70, y: 68 },
+    category: '体育场馆',
+    accessibilityFeatures: ['无障碍电梯', '无障碍出入口'],
+    currentStatus: 'stale',
+    lastVerifiedAt: daysAgo(45),
+    observationIds: ['obs-elevator-004'],
+  },
+  {
+    id: 'place-student-center',
+    name: '学生活动中心',
+    coordinates: { x: 50, y: 50 },
+    category: '活动中心',
+    accessibilityFeatures: ['无障碍出入口', '无障碍停车位'],
+    currentStatus: 'institution_confirmed',
+    lastVerifiedAt: daysAgo(5),
+    observationIds: [],
+  },
+];
+
+// --- 观察（含照片/时间/地点/标签/条款/核验状态） ---------------------------
+
+const OBSERVATIONS: Observation[] = [
+  {
+    id: 'obs-ramp-001',
+    placeId: 'place-library-east',
+    postId: 'post-facility-ramp',
+    photo: rampPhoto,
+    capturedAt: daysAgo(2, 9, 12),
+    coordinates: { x: 31.5, y: 27.5 },
+    facilityType: 'ramp',
+    issueType: 'occupied',
+    description: '图书馆东门轮椅坡道的通行区域停了多辆共享单车，轮椅无法上行。',
+    standardTags: ['#坡道', '#通道占用', '#需要复核'],
+    standardReferences: [findStandard('std-ramp-passage')],
+    aiConfidence: 0.88,
+    verificationStatus: 'pending',
+    reporterId: USERS.lin.userId,
+    reporterName: USERS.lin.name,
+    createdAt: daysAgo(2, 9, 20),
+    confirmations: [],
+    disputes: [],
+    remediationUpdates: [],
+  },
+  {
+    id: 'obs-tactile-002',
+    placeId: 'place-canteen',
+    postId: 'post-facility-tactile',
+    photo: tactilePhoto,
+    capturedAt: daysAgo(20, 11, 30),
+    coordinates: { x: 29, y: 63 },
+    facilityType: 'tactile_paving',
+    issueType: 'blocked',
+    description: '第一食堂侧门盲道被纸箱和路锥占用，行进盲道中断约 4 米。',
+    standardTags: ['#盲道', '#通道阻挡', '#需要复核'],
+    standardReferences: [findStandard('std-tactile-continuity')],
+    aiConfidence: 0.91,
+    verificationStatus: 'community_verified',
+    reporterId: USERS.chen.userId,
+    reporterName: USERS.chen.name,
+    createdAt: daysAgo(20, 11, 40),
+    confirmations: [
+      { userId: USERS.lin.userId, userName: USERS.lin.name, vote: 'confirm', createdAt: daysAgo(19, 10, 5) },
+      { userId: USERS.zhao.userId, userName: USERS.zhao.name, vote: 'confirm', createdAt: daysAgo(19, 10, 40) },
+    ],
+    disputes: [],
+    remediationUpdates: [],
+  },
+  {
+    id: 'obs-restroom-003',
+    placeId: 'place-teaching-3',
+    postId: 'post-facility-restroom',
+    photo: restroomPhoto,
+    capturedAt: daysAgo(8, 14, 5),
+    coordinates: { x: 63, y: 29.5 },
+    facilityType: 'accessible_restroom',
+    issueType: 'available',
+    description: '三教一层无障碍卫生间开放正常，扶手完好，轮椅可回旋。',
+    standardTags: ['#无障碍卫生间', '#正常可用'],
+    standardReferences: [findStandard('std-restroom')],
+    aiConfidence: 0.95,
+    verificationStatus: 'institution_confirmed',
+    reporterId: USERS.lin.userId,
+    reporterName: USERS.lin.name,
+    createdAt: daysAgo(8, 14, 15),
+    confirmations: [
+      { userId: USERS.chen.userId, userName: USERS.chen.name, vote: 'confirm', createdAt: daysAgo(7, 9, 30) },
+      { userId: USERS.zhao.userId, userName: USERS.zhao.name, vote: 'confirm', createdAt: daysAgo(7, 15, 10) },
+    ],
+    disputes: [],
+    remediationUpdates: [],
+  },
+  {
+    id: 'obs-elevator-004',
+    placeId: 'place-gym',
+    photo: elevatorPhoto,
+    capturedAt: daysAgo(45, 16, 0),
+    coordinates: { x: 71, y: 67 },
+    facilityType: 'elevator',
+    issueType: 'damaged',
+    description: '体育馆无障碍电梯外呼面板破损停用，缺少临时替代通道说明。',
+    standardTags: ['#电梯', '#设施破损', '#需要复核'],
+    standardReferences: [findStandard('std-elevator')],
+    aiConfidence: 0.83,
+    verificationStatus: 'stale',
+    reporterId: USERS.zhao.userId,
+    reporterName: USERS.zhao.name,
+    createdAt: daysAgo(45, 16, 12),
+    confirmations: [],
+    disputes: [],
+    remediationUpdates: [],
+  },
+];
+
+// --- 帖子（8 条：3 设施观察 / 2 科普 / 2 工具 / 1 经验） --------------------
+
+const POSTS: Post[] = [
+  {
+    id: 'post-facility-ramp',
+    type: 'facility',
+    author: { id: USERS.lin.userId, name: USERS.lin.name, role: USERS.lin.role },
+    title: '图书馆东门坡道被共享单车占用，轮椅上不去',
+    content:
+      '今天上午在图书馆东门看到，坡道通行区域停了三四辆共享单车，轮椅无法上行。已发布设施观察，等待附近志愿者现场复核。AI 模拟分析认为是“轮椅坡道 · 通道占用”，置信度 0.88。',
+    images: [rampPhoto],
+    tags: ['#坡道', '#通道占用', '#需要复核'],
+    placeId: 'place-library-east',
+    observationId: 'obs-ramp-001',
+    createdAt: daysAgo(2, 9, 25),
+  },
+  {
+    id: 'post-article-ramp',
+    type: 'article',
+    author: { id: 'u-system', name: '无碍共创科普号', role: 'lead_volunteer' },
+    title: '轮椅坡道怎么看？坡度、宽度和扶手一图读懂',
+    content:
+      '有效通行宽度不应小于 1.20 米，坡度越缓越省力，两侧宜设扶手。看到坡道长时间被占用，可以发设施观察并加上 #坡道 #通道占用 标签。条款内容为原型示例，正式使用前需核对原文。',
+    images: [articleRampPhoto],
+    tags: ['#坡道', '#无障碍出入口'],
+    createdAt: daysAgo(3, 8, 0),
+  },
+  {
+    id: 'post-tool-map',
+    type: 'tool',
+    author: { id: USERS.zhao.userId, name: USERS.zhao.name, role: USERS.zhao.role },
+    title: '三个能查无障碍出入口的地图工具对比',
+    content:
+      '出门前我会同时看三款地图：重点核对无障碍出入口位置、电梯是否停靠目标楼层、卫生间是否在闸机/检票口内。信息不一致时以最近核验时间最新的为准，并在本社区发起复核。',
+    images: [toolMapPhoto],
+    tags: ['#工具', '#无障碍出入口'],
+    createdAt: daysAgo(4, 20, 0),
+  },
+  {
+    id: 'post-article-tactile',
+    type: 'article',
+    author: { id: 'u-system', name: '无碍共创科普号', role: 'lead_volunteer' },
+    title: '盲道不只是黄色砖：行进砖和提示砖的区别',
+    content:
+      '长条形条纹的是行进盲道，表示可以直行；圆点形的是提示盲道，表示前方有转弯、路口或障碍物。盲道被占用或中断时，请用 #盲道 #通道阻挡 记录，条款为原型示例，需核对原文。',
+    images: [articleTactilePhoto],
+    tags: ['#盲道'],
+    createdAt: daysAgo(6, 12, 0),
+  },
+  {
+    id: 'post-facility-restroom',
+    type: 'facility',
+    author: { id: USERS.lin.userId, name: USERS.lin.name, role: USERS.lin.role },
+    title: '三教一层无障碍卫生间实测正常可用',
+    content:
+      '三教一层无障碍卫生间今天开放正常：坐便器、两侧抓杆完好，门外可回旋轮椅，保洁说每天有人巡检。已由两位志愿者复核并经机构确认，大家可放心使用。',
+    images: [restroomPhoto],
+    tags: ['#无障碍卫生间', '#正常可用'],
+    placeId: 'place-teaching-3',
+    observationId: 'obs-restroom-003',
+    createdAt: daysAgo(8, 14, 20),
+  },
+  {
+    id: 'post-tool-elevator',
+    type: 'tool',
+    author: { id: USERS.chen.userId, name: USERS.chen.name, role: USERS.chen.role },
+    title: '出门前必看：用手机判断电梯能不能进轮椅',
+    content:
+      '拍一张电梯门和轿厢照片做参照：门洞净宽、轿厢深度是否 ≥ 1.40 米、按钮高度是否顺手、轿厢内有没有扶手和镜子。不确认时直接在社区问 AI 或请最近到过的同学复核。',
+    images: [toolElevatorPhoto],
+    tags: ['#电梯', '#工具'],
+    createdAt: daysAgo(10, 19, 0),
+  },
+  {
+    id: 'post-experience-metro',
+    type: 'experience',
+    author: { id: USERS.chen.userId, name: USERS.chen.name, role: USERS.chen.role },
+    title: '坐轮椅乘地铁去医院，我的一次完整出行记录',
+    content:
+      '提前打了地铁站无障碍电话预约直梯衔接，换乘站走直梯通道，出站到医院走无障碍过街坡道，全程 42 分钟。建议把“需要坡道、避开台阶”加入偏好，导航演示会优先给出无障碍路线（模拟导航）。',
+    images: [experienceMetroPhoto],
+    tags: ['#生活经验', '#电梯'],
+    createdAt: daysAgo(12, 21, 0),
+  },
+  {
+    id: 'post-facility-tactile',
+    type: 'facility',
+    author: { id: USERS.chen.userId, name: USERS.chen.name, role: USERS.chen.role },
+    title: '第一食堂侧门盲道被纸箱路锥阻挡',
+    content:
+      '侧门外卖取餐点把纸箱和路锥放在盲道上，行进盲道中断约 4 米。两位志愿者现场确认后已标记“社区已复核”，希望取餐点改放到旁边空地。',
+    images: [tactilePhoto],
+    tags: ['#盲道', '#通道阻挡'],
+    placeId: 'place-canteen',
+    observationId: 'obs-tactile-002',
+    createdAt: daysAgo(20, 11, 45),
+  },
+];
+
+// --- 时间线（所有状态变化记录操作人角色与时间） ---------------------------
+
+const TIMELINE: TimelineEvent[] = [
+  {
+    id: 'tl-gym-published',
+    placeId: 'place-gym',
+    observationId: 'obs-elevator-004',
+    type: 'observation_published',
+    actorId: USERS.zhao.userId,
+    actorName: USERS.zhao.name,
+    actorRole: 'volunteer',
+    message: '发布设施观察：体育馆无障碍电梯面板破损停用',
+    statusAfter: 'pending',
+    createdAt: daysAgo(45, 16, 12),
+  },
+  {
+    id: 'tl-gym-stale',
+    placeId: 'place-gym',
+    observationId: 'obs-elevator-004',
+    type: 'status_changed',
+    actorId: USERS.lin.userId,
+    actorName: USERS.lin.name,
+    actorRole: 'volunteer',
+    message: '距上次核验超过 30 天，按模拟规则自动标记为“信息可能过期”',
+    statusAfter: 'stale',
+    createdAt: daysAgo(15, 0, 5),
+  },
+  {
+    id: 'tl-canteen-published',
+    placeId: 'place-canteen',
+    observationId: 'obs-tactile-002',
+    type: 'observation_published',
+    actorId: USERS.chen.userId,
+    actorName: USERS.chen.name,
+    actorRole: 'volunteer',
+    message: '发布设施观察：盲道被纸箱与路锥阻挡',
+    statusAfter: 'pending',
+    createdAt: daysAgo(20, 11, 40),
+  },
+  {
+    id: 'tl-canteen-confirm-1',
+    placeId: 'place-canteen',
+    observationId: 'obs-tactile-002',
+    type: 'verified',
+    actorId: USERS.lin.userId,
+    actorName: USERS.lin.name,
+    actorRole: 'volunteer',
+    message: '志愿者现场复核：与发布信息一致（确认 1/2）',
+    createdAt: daysAgo(19, 10, 5),
+  },
+  {
+    id: 'tl-canteen-confirm-2',
+    placeId: 'place-canteen',
+    observationId: 'obs-tactile-002',
+    type: 'status_changed',
+    actorId: USERS.zhao.userId,
+    actorName: USERS.zhao.name,
+    actorRole: 'volunteer',
+    message: '第二位不同志愿者现场复核一致，达到 2 人确认，更新为“社区已复核”',
+    statusAfter: 'community_verified',
+    createdAt: daysAgo(19, 10, 40),
+  },
+  {
+    id: 'tl-restroom-published',
+    placeId: 'place-teaching-3',
+    observationId: 'obs-restroom-003',
+    type: 'observation_published',
+    actorId: USERS.lin.userId,
+    actorName: USERS.lin.name,
+    actorRole: 'volunteer',
+    message: '发布正向观察：无障碍卫生间正常可用',
+    statusAfter: 'pending',
+    createdAt: daysAgo(8, 14, 15),
+  },
+  {
+    id: 'tl-restroom-verified',
+    placeId: 'place-teaching-3',
+    observationId: 'obs-restroom-003',
+    type: 'status_changed',
+    actorId: USERS.chen.userId,
+    actorName: USERS.chen.name,
+    actorRole: 'volunteer',
+    message: '两位不同志愿者复核一致，更新为“社区已复核”',
+    statusAfter: 'community_verified',
+    createdAt: daysAgo(7, 15, 10),
+  },
+  {
+    id: 'tl-restroom-confirmed',
+    placeId: 'place-teaching-3',
+    observationId: 'obs-restroom-003',
+    type: 'status_changed',
+    actorId: USERS.wang.userId,
+    actorName: USERS.wang.name,
+    actorRole: 'institution',
+    message: '场馆方巡检确认设施正常，更新为“已确认 · 正常”',
+    statusAfter: 'institution_confirmed',
+    createdAt: daysAgo(6, 9, 0),
+  },
+  {
+    id: 'tl-library-published',
+    placeId: 'place-library-east',
+    observationId: 'obs-ramp-001',
+    type: 'observation_published',
+    actorId: USERS.lin.userId,
+    actorName: USERS.lin.name,
+    actorRole: 'volunteer',
+    message: '发布设施观察：坡道被共享单车占用',
+    statusAfter: 'pending',
+    createdAt: daysAgo(2, 9, 20),
+  },
+];
+
+// --- 积分明细 ---------------------------------------------------------------
+
+const POINT_RECORDS: PointRecord[] = [
+  {
+    id: 'pt-1',
+    userId: USERS.zhao.userId,
+    userName: USERS.zhao.name,
+    delta: 10,
+    reason: 'observation_published',
+    detail: '发布一条有效设施观察（体育馆电梯）',
+    relatedObservationId: 'obs-elevator-004',
+    createdAt: daysAgo(45, 16, 12),
+  },
+  {
+    id: 'pt-2',
+    userId: USERS.chen.userId,
+    userName: USERS.chen.name,
+    delta: 10,
+    reason: 'observation_published',
+    detail: '发布一条有效设施观察（食堂盲道）',
+    relatedObservationId: 'obs-tactile-002',
+    createdAt: daysAgo(20, 11, 40),
+  },
+  {
+    id: 'pt-3',
+    userId: USERS.lin.userId,
+    userName: USERS.lin.name,
+    delta: 5,
+    reason: 'verification_confirmed',
+    detail: '完成一次独立现场复核（食堂盲道）',
+    relatedObservationId: 'obs-tactile-002',
+    createdAt: daysAgo(19, 10, 5),
+  },
+  {
+    id: 'pt-4',
+    userId: USERS.zhao.userId,
+    userName: USERS.zhao.name,
+    delta: 5,
+    reason: 'verification_confirmed',
+    detail: '完成一次独立现场复核（食堂盲道）',
+    relatedObservationId: 'obs-tactile-002',
+    createdAt: daysAgo(19, 10, 40),
+  },
+  {
+    id: 'pt-5',
+    userId: USERS.lin.userId,
+    userName: USERS.lin.name,
+    delta: 10,
+    reason: 'observation_published',
+    detail: '发布一条有效设施观察（三教卫生间）',
+    relatedObservationId: 'obs-restroom-003',
+    createdAt: daysAgo(8, 14, 15),
+  },
+  {
+    id: 'pt-6',
+    userId: USERS.chen.userId,
+    userName: USERS.chen.name,
+    delta: 5,
+    reason: 'verification_confirmed',
+    detail: '完成一次独立现场复核（三教卫生间）',
+    relatedObservationId: 'obs-restroom-003',
+    createdAt: daysAgo(7, 9, 30),
+  },
+  {
+    id: 'pt-7',
+    userId: USERS.zhao.userId,
+    userName: USERS.zhao.name,
+    delta: 5,
+    reason: 'verification_confirmed',
+    detail: '完成一次独立现场复核（三教卫生间）',
+    relatedObservationId: 'obs-restroom-003',
+    createdAt: daysAgo(7, 15, 10),
+  },
+];
+
+/** 构建一份全新的演示初始数据（resetDemoData 与首次启动使用） */
+export function buildSeedData(): AppData {
+  return {
+    places: PLACES.map((place) => ({ ...place, observationIds: [...place.observationIds] })),
+    posts: POSTS.map((post) => ({
+      ...post,
+      images: [...post.images],
+      tags: [...post.tags],
+    })),
+    observations: OBSERVATIONS.map((obs) => ({
+      ...obs,
+      standardTags: [...obs.standardTags],
+      standardReferences: obs.standardReferences.map((ref) => ({ ...ref })),
+      confirmations: obs.confirmations.map((vote) => ({ ...vote })),
+      disputes: obs.disputes.map((vote) => ({ ...vote })),
+      remediationUpdates: obs.remediationUpdates.map((item) => ({ ...item })),
+    })),
+    timeline: TIMELINE.map((event) => ({ ...event })),
+    pointRecords: POINT_RECORDS.map((record) => ({ ...record })),
+    demoUsers: Object.values(USERS).map((user) => ({ ...user })),
+    currentUserId: USERS.lin.userId,
+    preferences: {
+      avoidStairs: true,
+      needsRamp: true,
+      needsElevator: false,
+      needsAccessibleRestroom: false,
+      needsTactilePaving: false,
+      largeText: false,
+      highContrast: false,
+      voiceGuidance: false,
+      reducedMotion: false,
+    },
+    privacySettings: {
+      autoBlurFaces: true,
+      stripExif: true,
+    },
+    routes: DEMO_ROUTES.map((route) => ({
+      ...route,
+      steps: route.steps.map((step) => ({ ...step, coordinates: { ...step.coordinates } })),
+    })),
+    navigation: {
+      status: 'idle',
+      routeId: null,
+      view: 'map',
+      soundOn: true,
+      traveledMeters: 0,
+      startedAt: null,
+    },
+  };
+}

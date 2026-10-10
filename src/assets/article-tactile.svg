@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="行进盲道砖与提示盲道砖区别插图">
+  <rect width="480" height="320" fill="#f5f1e3"/>
+  <rect x="0" y="0" width="480" height="36" fill="#8a6d3b"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">无障碍科普</text>
+  <g fill="#e6b93b">
+    <rect x="70" y="100" width="140" height="140" rx="8"/>
+    <rect x="270" y="100" width="140" height="140" rx="8"/>
+  </g>
+  <g fill="#b8871e">
+    <rect x="92" y="122" width="96" height="10" rx="5"/>
+    <rect x="92" y="150" width="96" height="10" rx="5"/>
+    <rect x="92" y="178" width="96" height="10" rx="5"/>
+    <rect x="92" y="206" width="96" height="10" rx="5"/>
+    <circle cx="298" cy="128" r="7"/><circle cx="330" cy="128" r="7"/><circle cx="362" cy="128" r="7"/>
+    <circle cx="298" cy="160" r="7"/><circle cx="330" cy="160" r="7"/><circle cx="362" cy="160" r="7"/>
+    <circle cx="298" cy="192" r="7"/><circle cx="330" cy="192" r="7"/><circle cx="362" cy="192" r="7"/>
+    <circle cx="298" cy="224" r="7"/><circle cx="330" cy="224" r="7"/><circle cx="362" cy="224" r="7"/>
+  </g>
+  <text x="140" y="270" text-anchor="middle" fill="#5d4a1f" font-size="17" font-family="sans-serif">行进砖：长条形</text>
+  <text x="340" y="270" text-anchor="middle" fill="#5d4a1f" font-size="17" font-family="sans-serif">提示砖：圆点形</text>
+</svg>

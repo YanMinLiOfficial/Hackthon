@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="示例照片：电梯按钮高度偏高">
+  <rect width="480" height="320" fill="#e4e9ef"/>
+  <rect x="140" y="40" width="200" height="240" fill="#9aa7b4" stroke="#6b7886" stroke-width="3"/>
+  <rect x="170" y="70" width="140" height="150" fill="#c9d3dd"/>
+  <circle cx="210" cy="120" r="12" fill="#2b3a47"/>
+  <circle cx="270" cy="120" r="12" fill="#2b3a47"/>
+  <rect x="200" y="232" width="80" height="30" rx="6" fill="#2b3a47"/>
+  <text x="240" y="300" text-anchor="middle" font-size="15" fill="#33414f" font-family="sans-serif">示例照片 · 电梯按钮</text>
+</svg>

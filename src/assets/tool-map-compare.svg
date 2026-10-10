@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="三款无障碍地图工具对比插图">
+  <rect width="480" height="320" fill="#eef0f6"/>
+  <rect x="0" y="0" width="480" height="36" fill="#4a4e8a"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">工具分享</text>
+  <rect x="40" y="70" width="120" height="200" rx="12" fill="#fff" stroke="#c3c9de"/>
+  <rect x="180" y="70" width="120" height="200" rx="12" fill="#fff" stroke="#c3c9de"/>
+  <rect x="320" y="70" width="120" height="200" rx="12" fill="#fff" stroke="#c3c9de"/>
+  <g>
+    <path d="M100 120 c-16 24 -16 40 0 56 c16 -16 16 -32 0 -56z" fill="#d94f4f"/>
+    <circle cx="100" cy="138" r="7" fill="#fff"/>
+    <path d="M240 120 c-16 24 -16 40 0 56 c16 -16 16 -32 0 -56z" fill="#2f9e63"/>
+    <circle cx="240" cy="138" r="7" fill="#fff"/>
+    <path d="M380 120 c-16 24 -16 40 0 56 c16 -16 16 -32 0 -56z" fill="#1f6fb2"/>
+    <circle cx="380" cy="138" r="7" fill="#fff"/>
+  </g>
+  <text x="100" y="210" text-anchor="middle" font-size="15" fill="#333" font-family="sans-serif">地图 A</text>
+  <text x="240" y="210" text-anchor="middle" font-size="15" fill="#333" font-family="sans-serif">地图 B</text>
+  <text x="380" y="210" text-anchor="middle" font-size="15" fill="#333" font-family="sans-serif">地图 C</text>
+  <text x="240" y="245" text-anchor="middle" font-size="14" fill="#555" font-family="sans-serif">出入口 / 卫生间 / 电梯信息对比</text>
+</svg>

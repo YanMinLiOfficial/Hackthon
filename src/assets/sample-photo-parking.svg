@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="示例照片：无障碍停车位被占用">
+  <rect width="480" height="320" fill="#dfe6ea"/>
+  <rect x="60" y="90" width="360" height="170" fill="#7f8c99"/>
+  <line x1="240" y1="90" x2="240" y2="260" stroke="#fff" stroke-width="5" stroke-dasharray="16 14"/>
+  <g fill="#e07b26">
+    <rect x="285" y="140" width="110" height="48" rx="10"/>
+    <circle cx="312" cy="196" r="13"/>
+    <circle cx="372" cy="196" r="13"/>
+  </g>
+  <text x="240" y="300" text-anchor="middle" font-size="15" fill="#33414f" font-family="sans-serif">示例照片 · 无障碍停车位</text>
+</svg>

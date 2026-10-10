@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="第三教学楼无障碍卫生间正常可用">
+  <rect width="480" height="320" fill="#e9f1ee"/>
+  <rect x="0" y="0" width="480" height="36" fill="#1f6fb2"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">设施观察 · 第三教学楼一层</text>
+  <rect x="150" y="70" width="180" height="210" rx="10" fill="#ffffff" stroke="#9fb5ab" stroke-width="3"/>
+  <circle cx="240" cy="128" r="22" fill="#1f8a4c"/>
+  <path d="M228 128 l9 9 l16 -18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <g fill="none" stroke="#3f6e5c" stroke-width="4">
+    <circle cx="240" cy="190" r="18"/>
+    <path d="M240 208 v34 M240 218 l-20 14 M240 218 l20 14"/>
+  </g>
+  <text x="240" y="265" text-anchor="middle" fill="#1f8a4c" font-size="17" font-family="sans-serif">无障碍卫生间 · 正常开放</text>
+  <rect x="24" y="52" width="180" height="40" rx="8" fill="#e3f6ea" stroke="#1f8a4c"/>
+  <text x="36" y="77" fill="#0a5c2e" font-size="16" font-family="sans-serif">实测正常可用</text>
+</svg>

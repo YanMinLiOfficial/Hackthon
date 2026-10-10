@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="第一食堂侧门盲道被纸箱和路锥阻挡">
+  <rect width="480" height="320" fill="#eef2ec"/>
+  <rect x="0" y="0" width="480" height="36" fill="#1f6fb2"/>
+  <text x="16" y="24" fill="#fff" font-size="16" font-family="sans-serif">设施观察 · 第一食堂侧门</text>
+  <rect x="0" y="250" width="480" height="70" fill="#d6ddd3"/>
+  <g fill="#e6b93b">
+    <rect x="210" y="60" width="26" height="16" rx="3"/>
+    <rect x="210" y="86" width="26" height="16" rx="3"/>
+    <rect x="210" y="112" width="26" height="16" rx="3"/>
+    <rect x="210" y="138" width="26" height="16" rx="3"/>
+    <rect x="210" y="164" width="26" height="16" rx="3"/>
+    <rect x="210" y="190" width="26" height="16" rx="3"/>
+    <rect x="210" y="216" width="26" height="16" rx="3"/>
+    <rect x="210" y="242" width="26" height="16" rx="3"/>
+  </g>
+  <g>
+    <path d="M260 180 l18 -44 h20 l18 44 z" fill="#e25b3a"/>
+    <rect x="272" y="150" width="32" height="8" fill="#fff"/>
+    <rect x="150" y="196" width="58" height="48" fill="#c89b6c" stroke="#9a744f"/>
+    <path d="M150 196 l29 -18 l29 18" fill="none" stroke="#9a744f" stroke-width="3"/>
+  </g>
+  <rect x="24" y="52" width="220" height="40" rx="8" fill="#fff4e0" stroke="#b26a00"/>
+  <text x="36" y="77" fill="#8a4b00" font-size="16" font-family="sans-serif">盲道被纸箱和路锥阻挡</text>
+</svg>

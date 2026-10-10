@@ -14,7 +14,7 @@
 - [x] 初始化 React + TypeScript + Vite 项目。
 - [ ] 建立主题、路由、底部导航和集中式产品配置。
 - [x] 定义地点、帖子、观察、用户偏好和状态变化的数据模型。
-- [ ] 准备本地模拟数据及本地图片/SVG 素材。
+- [x] 准备本地模拟数据及本地图片/SVG 素材。
 - [ ] 建立 `localStorage` 持久化与重置演示数据能力。
 - [ ] 确认 `npm run dev` 和 `npm run build` 可用。
 
@@ -62,4 +62,5 @@
 | 2026-10-10 | 建立四人协作分工 | 已创建 `TEAM_PLAN.md`；成员姓名待替换 |
 | 2026-10-10 | M0：初始化 Vite 脚手架（lead/core-integration） | React 18 + TS 5.6 + Vite 5.4 + react-router-dom 6.28；`npm install`、`npm run build` 通过；占位 App |
 | 2026-10-10 | M0：共享领域模型与 store 接口契约（独立提交） | `src/types/index.ts`：Place/Post/Observation/偏好/积分/路线及 `AppStore` 共享接口；成员 A/B/C 以此为唯一数据契约；tsc 通过 |
-| 2026-10-10 | M0：集中式产品配置与主题令牌 | `src/app/config/`：产品名、五项底部导航、帖子/设施/标签文案、六态颜色+图形双编码、核验阈值/积分/时效规则、统一模拟标注、localStorage 键、高德 Key 预留入口；`src/app/theme.css` 大字/高对比/减少动画令牌；tsc 通过 |
+| 2026-10-10 | M0：集中式产品配置与主题令牌 | `src/app/config/`：产品名、五项底部导航、帖子/设施/标签文案、六态颜色+图形双编码、核验阈值(2人)/时效(30天)/积分规则、统一模拟标注、localStorage 键、高德 Key 预留入口；`src/app/theme.css` 大字/高对比/减少动画令牌；tsc 通过 |
+| 2026-10-10 | M0：本地模拟数据与 SVG 素材 | `src/data/`：5 个校园地点、8 条帖子（3 设施观察/2 科普/2 工具/1 经验）、4 条含照片与条款的观察、时间线、积分明细、3 名志愿者+1 名机构身份、26 秒预设路线、3 张发布示例照；11 个本地 SVG；7 条带“原型示例”标注的标准条款；npm run build 通过 |

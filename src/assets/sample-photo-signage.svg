@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="示例照片：走廊缺少无障碍导向标识">
+  <rect width="480" height="320" fill="#eceff3"/>
+  <rect x="0" y="70" width="480" height="190" fill="#d3d9e0"/>
+  <rect x="60" y="110" width="70" height="110" fill="#aeb9c5"/>
+  <rect x="350" y="110" width="70" height="110" fill="#aeb9c5"/>
+  <rect x="180" y="96" width="120" height="56" rx="6" fill="#ffffff" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="240" y="131" text-anchor="middle" font-size="16" fill="#7a8694" font-family="sans-serif">（空白墙面）</text>
+  <text x="240" y="300" text-anchor="middle" font-size="15" fill="#33414f" font-family="sans-serif">示例照片 · 缺失导向标识</text>
+</svg>
