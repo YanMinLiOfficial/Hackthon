@@ -7,6 +7,7 @@ import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProfilePlaceholder } from './pages/ProfilePlaceholder';
 import { HomePage } from '../features/journey/pages/HomePage';
 import { MapPage } from '../features/journey/pages/MapPage';
+import { PlaceDetailPage } from '../features/journey/pages/PlaceDetailPage';
 import '../features/journey/journey.css';
 
 /** 路由表：路径为共享约定，成员页面后续在对应 feature 目录实现并在此挂载 */
@@ -16,6 +17,7 @@ function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/places/:placeId" element={<PlaceDetailPage />} />
         <Route
           path="/publish"
           element={
