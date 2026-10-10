@@ -13,7 +13,7 @@
 
 - [x] 初始化 React + TypeScript + Vite 项目。
 - [ ] 建立主题、路由、底部导航和集中式产品配置。
-- [ ] 定义地点、帖子、观察、用户偏好和状态变化的数据模型。
+- [x] 定义地点、帖子、观察、用户偏好和状态变化的数据模型。
 - [ ] 准备本地模拟数据及本地图片/SVG 素材。
 - [ ] 建立 `localStorage` 持久化与重置演示数据能力。
 - [ ] 确认 `npm run dev` 和 `npm run build` 可用。
@@ -61,3 +61,4 @@
 | 2026-10-10 | 建立 Agent 工作约定和任务板 | 已创建 `AGENTS.md`、`.trae/rules/mvp.md` 和 `TASKS.md`；尚未初始化应用代码 |
 | 2026-10-10 | 建立四人协作分工 | 已创建 `TEAM_PLAN.md`；成员姓名待替换 |
 | 2026-10-10 | M0：初始化 Vite 脚手架（lead/core-integration） | React 18 + TS 5.6 + Vite 5.4 + react-router-dom 6.28；`npm install`、`npm run build` 通过；占位 App |
+| 2026-10-10 | M0：共享领域模型与 store 接口契约（独立提交） | `src/types/index.ts`：Place/Post/Observation/偏好/积分/路线及 `AppStore` 共享接口；tsc 通过；成员 A/B/C 以此为唯一数据契约 |
