@@ -1,0 +1,422 @@
+/* M1 主线（src/features/journey/）样式：全部使用 app 主题令牌 */
+
+.journey-section-head {
+  margin-bottom: var(--space-4);
+}
+
+.journey-section-head__title {
+  font-size: 1.3rem;
+}
+
+.journey-section-head__hint {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.journey-footnote {
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+/* --- 状态徽标：图形 + 文字 + 颜色 ----------------------------------------- */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--color-surface);
+}
+
+.status-badge--warning {
+  color: var(--tone-warning);
+  background: var(--tone-warning-bg);
+}
+.status-badge--success {
+  color: var(--tone-success);
+  background: var(--tone-success-bg);
+}
+.status-badge--info {
+  color: var(--tone-info);
+  background: var(--tone-info-bg);
+}
+.status-badge--attention {
+  color: var(--tone-attention);
+  background: var(--tone-attention-bg);
+}
+.status-badge--resolved {
+  color: var(--tone-resolved);
+  background: var(--tone-resolved-bg);
+}
+.status-badge--neutral {
+  color: var(--tone-neutral);
+  background: var(--tone-neutral-bg);
+}
+
+/* --- 设施帖卡片（临时适配器，成员 A 组件接入后可删除本块） --------------- */
+
+.post-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.post-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.post-card__media {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--color-surface-2);
+}
+
+.post-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-card__media .status-badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  box-shadow: var(--shadow-card);
+}
+
+.post-card__no-image {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--color-text-muted);
+}
+
+.post-card__body {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.post-card__title {
+  font-size: 1.05rem;
+}
+
+.post-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.post-card__excerpt {
+  color: var(--color-text);
+  font-size: 0.92rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.tag-chip {
+  font-size: 0.78rem;
+  padding: 1px var(--space-2);
+  border-radius: 999px;
+  background: var(--tone-info-bg);
+  color: var(--tone-info);
+}
+
+.post-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.primary-button {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 600;
+}
+
+.ghost-button {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* --- 校园地图（临时适配器，成员 B 组件接入后可删除本块） ----------------- */
+
+.map-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-card);
+}
+
+.map-panel__hint {
+  margin: var(--space-1) var(--space-1) var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.campus-map {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: #e8f0e8;
+  display: block;
+}
+
+.map-marker {
+  cursor: pointer;
+}
+
+.map-marker:focus-visible {
+  outline: none;
+}
+
+.map-marker__hit {
+  fill: transparent;
+}
+
+.map-marker__hit:focus {
+  fill: rgba(11, 92, 173, 0.12);
+}
+
+.map-marker__name {
+  font-size: 2.6px;
+  fill: var(--color-text);
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-width: 0.7px;
+  stroke-linejoin: round;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+}
+
+.map-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+/* --- 地点详情与时间线 ---------------------------------------------------- */
+
+.detail-header {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.detail-header__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.detail-header__title {
+  font-size: 1.25rem;
+}
+
+.detail-header__category {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.detail-header__features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.feature-chip {
+  font-size: 0.8rem;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.detail-header__verified {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.detail-back-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.section-block {
+  margin-top: var(--space-5);
+}
+
+.section-block__title {
+  font-size: 1.05rem;
+  margin-bottom: var(--space-3);
+}
+
+.observation-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--space-4);
+}
+
+.observation-card__media {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--color-surface-2);
+}
+
+.observation-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.observation-card__media .status-badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.observation-card__body {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.observation-card__meta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px var(--space-3);
+  font-size: 0.88rem;
+}
+
+.observation-card__meta dt {
+  color: var(--color-text-muted);
+}
+
+.observation-card__meta dd {
+  margin: 0;
+}
+
+.ai-note {
+  border: 1px solid var(--tone-warning);
+  background: var(--tone-warning-bg);
+  color: #6b4300;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.84rem;
+  display: grid;
+  gap: 2px;
+}
+
+.standard-box {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+  font-size: 0.86rem;
+  display: grid;
+  gap: 4px;
+}
+
+.standard-box__code {
+  font-weight: 700;
+}
+
+.standard-box__sample {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 3px solid var(--color-border);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.timeline__item {
+  position: relative;
+  padding-left: var(--space-4);
+}
+
+.timeline__item::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 0.45em;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid var(--color-surface);
+}
+
+.timeline__meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.timeline__role {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.empty-note {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}

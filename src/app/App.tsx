@@ -5,30 +5,17 @@ import { AppStoreProvider, useAppStore } from '../store';
 import { AppLayout } from './AppLayout';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProfilePlaceholder } from './pages/ProfilePlaceholder';
+import { HomePage } from '../features/journey/pages/HomePage';
+import '../features/journey/journey.css';
 
 /** 路由表：路径为共享约定，成员页面后续在对应 feature 目录实现并在此挂载 */
 function AppRoutes() {
-  const { posts, places, observations } = useAppStore();
+  const { places, observations } = useAppStore();
 
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route
-          path="/"
-          element={
-            <PlaceholderPage
-              title="首页 · 社区帖子流"
-              owner="成员 A"
-              modulePath="src/features/feed/"
-              milestone="M1"
-              facts={[
-                `已就绪 ${posts.length} 条种子帖子（设施观察/科普/工具/经验）`,
-                '筛选：全部 · 设施观察 · 科普 · 工具',
-                '设施观察帖可一键跳转到地图地点（M1 贯通）',
-              ]}
-            />
-          }
-        />
+        <Route path="/" element={<HomePage />} />
         <Route
           path="/map"
           element={
