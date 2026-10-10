@@ -61,4 +61,5 @@
 | 2026-10-10 | 建立 Agent 工作约定和任务板 | 已创建 `AGENTS.md`、`.trae/rules/mvp.md` 和 `TASKS.md`；尚未初始化应用代码 |
 | 2026-10-10 | 建立四人协作分工 | 已创建 `TEAM_PLAN.md`；成员姓名待替换 |
 | 2026-10-10 | M0：初始化 Vite 脚手架（lead/core-integration） | React 18 + TS 5.6 + Vite 5.4 + react-router-dom 6.28；`npm install`、`npm run build` 通过；占位 App |
-| 2026-10-10 | M0：共享领域模型与 store 接口契约（独立提交） | `src/types/index.ts`：Place/Post/Observation/偏好/积分/路线及 `AppStore` 共享接口；tsc 通过；成员 A/B/C 以此为唯一数据契约 |
+| 2026-10-10 | M0：共享领域模型与 store 接口契约（独立提交） | `src/types/index.ts`：Place/Post/Observation/偏好/积分/路线及 `AppStore` 共享接口；成员 A/B/C 以此为唯一数据契约；tsc 通过 |
+| 2026-10-10 | M0：集中式产品配置与主题令牌 | `src/app/config/`：产品名、五项底部导航、帖子/设施/标签文案、六态颜色+图形双编码、核验阈值/积分/时效规则、统一模拟标注、localStorage 键、高德 Key 预留入口；`src/app/theme.css` 大字/高对比/减少动画令牌；tsc 通过 |
