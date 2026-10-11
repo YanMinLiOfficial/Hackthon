@@ -30,6 +30,7 @@ export function TempFacilityPostCard({
           </div>
         )}
         <StatusBadge status={status} />
+        <span className="post-card__kind-badge post-card__kind-badge--inspect">督查</span>
         {post.images[0]?.includes('generated-') && <span className="post-card__demo-label">AI 生成 · 演示图</span>}
       </div>
       <div className="post-card__body">

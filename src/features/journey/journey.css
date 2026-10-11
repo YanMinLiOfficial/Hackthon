@@ -685,6 +685,29 @@
   pointer-events: none;
 }
 
+/* 帖子图片右上角：督查 / 分享 类型标识 */
+.post-card__kind-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+  box-shadow: var(--shadow-card);
+}
+.post-card__kind-badge--inspect {
+  background: var(--tone-warning-bg);
+  color: var(--tone-warning);
+  border: 1px solid var(--tone-warning);
+}
+.post-card__kind-badge--share {
+  background: var(--tone-info-bg);
+  color: var(--tone-info);
+  border: 1px solid var(--tone-info);
+}
+
 .contribution-summary a { display: inline-block; margin-right: 1.2rem; margin-bottom: .3rem; }
 .reward-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1rem; margin: 1.5rem 0; }
 .reward-card { border: 1px solid var(--color-border); border-radius: 20px; padding: 1.2rem; background: var(--color-surface); display: flex; flex-direction: column; gap: .7rem; }

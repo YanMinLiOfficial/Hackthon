@@ -84,6 +84,7 @@ export function HomePage() {
                   {post.images[0] ? <img src={post.images[0]} alt={post.title} loading="lazy" decoding="async" /> : <span>社区分享</span>}
                 </button>
                 {post.images[0]?.includes('generated-') && <span className="post-card__demo-label">AI 生成 · 演示图</span>}
+                <span className={`post-card__kind-badge ${post.type === 'facility' ? 'post-card__kind-badge--inspect' : 'post-card__kind-badge--share'}`}>{post.type === 'facility' ? '督查' : '分享'}</span>
               </div>
               <div className="post-card__body">
                 <h3 className="post-card__title">{post.title}</h3>
