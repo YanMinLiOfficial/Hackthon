@@ -38,7 +38,7 @@
   .map-workspace .map-panel { padding: 0; border: 0; border-radius: 0; box-shadow: none; }
   .map-workspace .amap-canvas, .map-workspace .campus-map { height: 100dvh; aspect-ratio: auto; border: 0; border-radius: 0; }
   .map-workspace .map-controls { top: 130px; }
-  .map-workspace > .map-panel__hint:not(.map-workspace__help):not(.map-workspace__notice) { position: absolute; top: 130px; left: 24px; z-index: 5; background: var(--color-surface); padding: 10px; border-radius: 10px; }
+  .map-workspace > .map-panel__hint:not(.map-workspace__help):not(.map-workspace__notice) { position: absolute; bottom: 108px; left: 24px; z-index: 5; max-width: calc(100% - 260px); background: var(--color-surface); padding: 10px; border-radius: 10px; }
 }
 
 .map-fallback-note {
