@@ -110,7 +110,24 @@ export function HomePage() {
         })}
       </div>
       {filteredPosts.length === 0 && <div className="community-empty"><h3>暂时没有找到相关帖子</h3><p>试试“坡道”“盲道”或“电梯”，也可以切换到推荐查看全部主题。</p><button className="ghost-button" type="button" onClick={() => { setParams({}); }}>清除搜索和分类</button></div>}
-      <dialog className="post-preview" ref={previewRef} aria-labelledby="post-preview-title" onClose={() => setSelectedPost(null)}>
+      <dialog
+        className="post-preview"
+        ref={previewRef}
+        aria-labelledby="post-preview-title"
+        onClose={() => setSelectedPost(null)}
+        onClick={(event) => {
+          // 点击弹窗内容以外的区域（含 ::backdrop）时关闭详情
+          const dialog = previewRef.current;
+          if (!dialog) return;
+          const rect = dialog.getBoundingClientRect();
+          const inside =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+          if (!inside) dialog.close();
+        }}
+      >
         {selectedPost && <>
           <button className="post-preview__close ghost-button" type="button" onClick={() => previewRef.current?.close()}>关闭</button>
           {selectedPost.images[0] && <img src={selectedPost.images[0]} alt={selectedPost.title} />}
