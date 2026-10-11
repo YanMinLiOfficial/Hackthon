@@ -47,6 +47,8 @@ export function HomePage() {
   };
   const search = query.trim().toLocaleLowerCase();
   const filteredPosts = store.posts.filter((post) => {
+    // 不显示当前身份自己发布的帖子
+    if (post.author.id === store.currentUser.userId) return false;
     if (topic.type && post.type !== topic.type) return false;
     const place = post.placeId ? store.getPlace(post.placeId) : undefined;
     return [post.title, post.content, post.author.name, place?.name ?? '', ...post.tags]
