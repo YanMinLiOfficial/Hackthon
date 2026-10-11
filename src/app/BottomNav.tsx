@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { NAV_ITEMS, type NavIcon } from './config';
+import { useAppStore } from '../store';
+import { helpEntryLabel } from '../store/helpRequests';
 
 /** 底部导航图标（线条风格；激活时由 CSS 变为填充色，同时有文字与指示条双重提示） */
 function NavGlyph({ icon }: { icon: NavIcon }) {
@@ -16,6 +18,10 @@ function NavGlyph({ icon }: { icon: NavIcon }) {
     focusable: false,
   };
   switch (icon) {
+    case 'help':
+      return <svg {...common}><circle cx="12" cy="12" r="9" /><path d="M12 7v10M7 12h10" /></svg>;
+    case 'ranking':
+      return <svg {...common}><path d="M8 4h8v5a4 4 0 0 1-8 0V4ZM8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 13v5M8 21h8M9 18h6v3" /></svg>;
     case 'home':
       return (
         <svg {...common}>
@@ -57,8 +63,10 @@ function NavGlyph({ icon }: { icon: NavIcon }) {
 }
 
 export function BottomNav() {
+  const store = useAppStore();
+  const waiting = store.helpRequests.filter((item) => item.status === 'pending' && item.recipientIds.includes(store.currentUserId)).length;
   return (
-    <nav className="bottom-nav" aria-label="底部主导航">
+    <nav className="bottom-nav" aria-label="主导航">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}
@@ -67,7 +75,7 @@ export function BottomNav() {
           className="bottom-nav__item"
         >
           <NavGlyph icon={item.icon} />
-          <span>{item.label}</span>
+          <span>{item.icon === 'help' ? helpEntryLabel(store.currentUser.role) : item.label}{item.icon === 'help' && waiting > 0 ? `（${waiting}）` : ''}</span>
         </NavLink>
       ))}
     </nav>

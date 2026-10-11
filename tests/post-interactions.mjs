@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import { build } from 'esbuild';
+
+const result = await build({ entryPoints: ['src/store/postInteractions.ts'], bundle: true, write: false, format: 'esm' });
+const { togglePostLike, appendPostComment } = await import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString('base64')}`);
+const original = { posts: [{ id: 'a' }, { id: 'b' }], pointRecords: [{ delta: 10 }], observations: [{ verificationStatus: 'pending' }] };
+let data = togglePostLike(original, 'a', 'u1');
+assert.deepEqual(data.posts[0].likedBy, ['u1']);
+assert.equal(original.posts[0].likedBy, undefined);
+data = togglePostLike(data, 'a', 'u2');
+assert.deepEqual(data.posts[0].likedBy, ['u1', 'u2']);
+data = togglePostLike(data, 'a', 'u1');
+assert.deepEqual(data.posts[0].likedBy, ['u2']);
+assert.equal(togglePostLike(data, 'missing', 'u1'), data);
+const comment = { id: 'c', author: { id: 'u1', name: '林晓', role: 'volunteer' }, content: '  有帮助  ', createdAt: '2026-10-11T00:00:00Z' };
+data = appendPostComment(data, 'a', comment);
+assert.equal(data.posts[0].comments[0].content, '有帮助');
+assert.equal(data.posts[1].comments, undefined);
+assert.equal(appendPostComment(data, 'a', { ...comment, content: '   ' }), data);
+assert.equal(appendPostComment(data, 'a', { ...comment, content: '字'.repeat(501) }), data);
+assert.equal(appendPostComment(data, 'missing', comment), data);
+assert.deepEqual(JSON.parse(JSON.stringify(data)), data);
+assert.equal(data.pointRecords, original.pointRecords);
+assert.equal(data.observations, original.observations);
+console.log('PASS: likes toggle per identity; comments validate, isolate and serialize; no verification or points changes.');

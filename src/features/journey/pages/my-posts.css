@@ -1,0 +1,18 @@
+.my-posts-page { max-width: 960px; margin: 0 auto; }
+.my-posts-entry { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px; margin: 20px 0; border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-surface); color: var(--color-text); text-decoration: none; }
+.my-posts-entry small { display: block; color: var(--color-text-muted); margin-top: 4px; }
+.my-posts-list { display: grid; gap: 16px; }
+.my-post { display: flex; gap: 20px; padding: 20px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); }
+.my-post__image { width: 140px; height: 180px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+.my-post__body { min-width: 0; display: grid; gap: 10px; flex: 1; }
+.my-post__body h3, .my-post__body p { overflow-wrap: anywhere; }
+.my-post__body time { color: var(--color-text-muted); font-size: .85rem; }
+.my-post__body details summary { cursor: pointer; color: var(--color-primary); }
+.my-post__body details p { white-space: pre-wrap; margin-top: 12px; }
+.my-post__actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.my-post__delete { color: var(--tone-danger); background: var(--tone-danger-bg); border: 1px solid var(--tone-danger); border-radius: 8px; padding: 10px 16px; }
+.my-posts-message { margin: 12px 0; color: var(--color-text-muted); }
+.my-posts-dialog { width: min(540px, calc(100% - 32px)); max-height: 85dvh; overflow: auto; border: 1px solid var(--color-border); border-radius: 16px; padding: 24px; color: var(--color-text); background: var(--color-surface); }
+.my-posts-dialog::backdrop { background: #17243280; }
+.my-posts-dialog p { margin: 16px 0; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .my-post { flex-direction: column; padding: 16px; } .my-post__image { width: 100%; height: 200px; } .my-posts-entry { align-items: flex-start; } }

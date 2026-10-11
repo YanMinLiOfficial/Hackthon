@@ -26,6 +26,7 @@ export interface PointRule {
 }
 
 export const POINT_RULES: Record<PointReason, PointRule> = {
+  reward_redeemed: { delta: 0, label: '积分兑换', detail: '模拟兑换扣除可用积分' },
   observation_published: {
     delta: 10,
     label: '有效观察',

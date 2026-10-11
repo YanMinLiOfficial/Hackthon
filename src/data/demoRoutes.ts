@@ -7,7 +7,7 @@ import type { DemoRoute } from '../types';
 export const DEMO_ROUTES: readonly DemoRoute[] = [
   {
     id: 'route-center-to-library',
-    name: '学生活动中心 → 图书馆东门（无障碍路线）',
+    name: '树德书院 → 工学院（模拟无障碍路线）',
     originPlaceId: 'place-student-center',
     destinationPlaceId: 'place-library-east',
     durationSeconds: 26,
@@ -17,7 +17,7 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
       {
         id: 'step-1',
         atMeters: 0,
-        instruction: '从学生活动中心无障碍出口出发，沿主路直行',
+        instruction: '从树德书院模拟无障碍出口出发，沿主路直行',
         coordinates: { x: 50, y: 52 },
       },
       {
@@ -43,7 +43,7 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
       {
         id: 'step-5',
         atMeters: 200,
-        instruction: '到达图书馆东门无障碍出入口，本次模拟导航结束',
+        instruction: '到达工学院模拟无障碍出入口，本次模拟导航结束',
         coordinates: { x: 30, y: 26 },
       },
     ],

@@ -10,6 +10,7 @@ import {
 import type { Observation, TimelineEvent } from '../../../types';
 import { useAppStore } from '../../../store';
 import { StatusBadge } from '../components/StatusBadge';
+import { ObservationReview } from '../components/ObservationReview';
 import { formatConfidence, formatDateTime, formatDate, ROLE_LABELS } from '../format';
 
 function ObservationCard({ observation }: { observation: Observation }) {
@@ -26,6 +27,7 @@ function ObservationCard({ observation }: { observation: Observation }) {
         <StatusBadge status={observation.verificationStatus} />
       </div>
       <div className="observation-card__body">
+        {observation.photo.includes('generated-') && <p className="journey-footnote">AI 生成演示图，非现场采集照片；图中设施不代表实际地点状态或标准合规结论。</p>}
         <p>{observation.description}</p>
         <dl className="observation-card__meta">
           <dt>设施类型</dt>
@@ -69,11 +71,7 @@ function ObservationCard({ observation }: { observation: Observation }) {
           </div>
         ))}
 
-        <p className="journey-footnote" style={{ margin: 0 }}>
-          独立确认 {observation.confirmations.length} 人
-          {observation.disputes.length > 0 && ` · 异议 ${observation.disputes.length} 条`}
-          ；复核与整改流程将在 M2 接入。
-        </p>
+        <ObservationReview observation={observation} />
       </div>
     </article>
   );
@@ -160,6 +158,11 @@ export function PlaceDetailPage() {
           {stale && ' · 距上次核验较久，信息可能过期，建议请求附近志愿者复核'}
         </p>
       </header>
+
+      {place.sceneImage && <figure className="place-scene">
+        <img src={place.sceneImage} alt="书院入口及坡道的 AI 场景示意，非该地点实拍" decoding="async" />
+        <figcaption>AI 生成 · 地点场景示意，非{place.name}实拍，不代表设施状态或核验记录。</figcaption>
+      </figure>}
 
       <section className="section-block" aria-labelledby="observations-heading">
         <h3 id="observations-heading" className="section-block__title">

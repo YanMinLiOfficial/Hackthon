@@ -1,0 +1,29 @@
+.ai-page { width: min(900px, 100%); margin: 0 auto; }
+.ai-page__header { margin-bottom: 24px; }
+.ai-page__header h2 { margin: 6px 0 8px; font-size: clamp(1.8rem, 5vw, 2.7rem); }
+.ai-page__header p { margin: 0; color: var(--color-text-muted); }
+.ai-page__eyebrow { color: var(--color-primary); font-weight: 700; font-size: .85rem; }
+.ai-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.ai-presets button { padding: 9px 14px; border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-surface); color: var(--color-text); text-align: left; }
+.ai-presets button:hover { border-color: var(--color-primary); }
+.ai-form { display: grid; gap: 8px; }
+.ai-form label { font-weight: 700; }
+.ai-form__row { display: grid; gap: 10px; }
+.ai-form textarea { width: 100%; resize: vertical; padding: 14px; border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-surface); color: var(--color-text); font: inherit; }
+.ai-form button { min-height: 48px; padding: 0 24px; border: 0; border-radius: 14px; background: var(--color-primary); color: #fff; font-weight: 700; }
+.ai-form button:disabled { opacity: .55; cursor: wait; }
+.ai-safety-note { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0; padding: 12px 14px; border-radius: 12px; background: var(--color-surface-2); color: var(--color-text-muted); font-size: .9rem; }
+.ai-safety-note strong { color: var(--color-text); }
+.ai-notice { padding: 12px 14px; border-left: 4px solid var(--tone-warning); background: var(--color-surface-2); }
+.ai-answer { padding: 22px; border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-surface); }
+.ai-answer h3 { margin: 0 0 10px; }
+.ai-answer h3:not(:first-child) { margin-top: 28px; }
+.ai-answer__summary { font-size: 1.08rem; line-height: 1.7; }
+.ai-answer__time { color: var(--color-text-muted); font-size: .85rem; }
+.ai-sources { display: grid; gap: 12px; }
+.ai-source { padding: 14px; border: 1px solid var(--color-border); border-radius: 12px; }
+.ai-source > span { color: var(--color-primary); font-size: .78rem; font-weight: 700; }
+.ai-source h4 { margin: 5px 0 9px; }
+.ai-source p { margin: 5px 0; color: var(--color-text-muted); }
+.ai-source a { display: inline-block; margin-top: 8px; font-weight: 700; }
+@media (min-width: 680px) { .ai-form__row { grid-template-columns: 1fr auto; align-items: end; } .ai-form button { min-width: 110px; } .ai-sources { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -8,15 +8,16 @@ import type {
   PointRecord,
 } from '../types';
 
-import rampPhoto from '../assets/photo-ramp-occupied.svg';
-import tactilePhoto from '../assets/photo-tactile-blocked.svg';
-import restroomPhoto from '../assets/photo-restroom-ok.svg';
-import articleRampPhoto from '../assets/article-ramp-standard.svg';
-import articleTactilePhoto from '../assets/article-tactile.svg';
-import toolMapPhoto from '../assets/tool-map-compare.svg';
-import toolElevatorPhoto from '../assets/tool-elevator-check.svg';
-import experienceMetroPhoto from '../assets/experience-metro.svg';
-import elevatorPhoto from '../assets/sample-photo-elevator.svg';
+import rampPhoto from '../assets/generated-ramp.png';
+import tactilePhoto from '../assets/generated-tactile.png';
+import restroomPhoto from '../assets/generated-restroom.png';
+import articleRampPhoto from '../assets/generated-article-ramp.png';
+import articleTactilePhoto from '../assets/generated-article-tactile.png';
+import toolMapPhoto from '../assets/generated-tool-map.png';
+import toolElevatorPhoto from '../assets/generated-tool-elevator.png';
+import experienceMetroPhoto from '../assets/generated-experience-metro.png';
+import elevatorPhoto from '../assets/generated-elevator-fault.png';
+import collegeEntrancePhoto from '../assets/generated-college-entrance.png';
 
 import { findStandard } from './standards';
 import { DEMO_ROUTES } from './demoRoutes';
@@ -31,20 +32,21 @@ function daysAgo(days: number, hour = 10, minute = 0): string {
 // --- 模拟身份（非真实账号） -------------------------------------------------
 
 const USERS = {
+  xiaoyu: { userId: 'u-xiaoyu', name: '小雨', role: 'disabled_person' },
   lin: { userId: 'u-lin', name: '林晓', role: 'volunteer' },
   chen: { userId: 'u-chen', name: '陈默', role: 'volunteer' },
   zhao: { userId: 'u-zhao', name: '赵宁', role: 'volunteer' },
   wang: { userId: 'u-wang', name: '王老师（图书馆）', role: 'institution' },
 } as const satisfies Record<string, SimulatedIdentity>;
 
-// --- 地点（5 个，唯一大头针） ----------------------------------------------
+// --- 地点（6 个，唯一大头针） ----------------------------------------------
 
 const PLACES: Place[] = [
   {
     id: 'place-library-east',
-    name: '图书馆东门',
-    coordinates: { x: 30, y: 26, lat: 22.59796, lng: 113.99337 },
-    category: '图书馆',
+    name: '工学院',
+    coordinates: { x: 30, y: 26, lat: 22.60051, lng: 113.996072 },
+    category: '学院',
     accessibilityFeatures: ['轮椅坡道', '无障碍出入口'],
     currentStatus: 'pending',
     lastVerifiedAt: daysAgo(2),
@@ -52,8 +54,8 @@ const PLACES: Place[] = [
   },
   {
     id: 'place-canteen',
-    name: '第一食堂侧门',
-    coordinates: { x: 28, y: 62, lat: 22.59951, lng: 113.99289 },
+    name: '荔园餐厅',
+    coordinates: { x: 28, y: 62, lat: 22.604882, lng: 113.999625 },
     category: '食堂',
     accessibilityFeatures: ['盲道', '无障碍出入口'],
     currentStatus: 'community_verified',
@@ -62,9 +64,9 @@ const PLACES: Place[] = [
   },
   {
     id: 'place-teaching-3',
-    name: '第三教学楼',
-    coordinates: { x: 64, y: 30, lat: 22.598, lng: 113.9945 },
-    category: '教学楼',
+    name: '第三科研楼',
+    coordinates: { x: 64, y: 30, lat: 22.602779, lng: 113.996366 },
+    category: '科研楼',
     accessibilityFeatures: ['无障碍卫生间', '无障碍电梯'],
     currentStatus: 'institution_confirmed',
     lastVerifiedAt: daysAgo(6),
@@ -72,9 +74,9 @@ const PLACES: Place[] = [
   },
   {
     id: 'place-gym',
-    name: '体育馆',
-    coordinates: { x: 70, y: 68, lat: 22.60466, lng: 113.99922 },
-    category: '体育场馆',
+    name: '致诚书院',
+    coordinates: { x: 70, y: 68, lat: 22.599575, lng: 113.999025 },
+    category: '书院',
     accessibilityFeatures: ['无障碍电梯', '无障碍出入口'],
     currentStatus: 'stale',
     lastVerifiedAt: daysAgo(45),
@@ -82,19 +84,51 @@ const PLACES: Place[] = [
   },
   {
     id: 'place-student-center',
-    name: '学生活动中心',
-    coordinates: { x: 50, y: 50, lat: 22.6019, lng: 113.9936 },
-    category: '活动中心',
+    sceneImage: collegeEntrancePhoto,
+    name: '树德书院',
+    coordinates: { x: 50, y: 50, lat: 22.600665, lng: 113.999474 },
+    category: '书院',
     accessibilityFeatures: ['无障碍出入口', '无障碍停车位'],
     currentStatus: 'institution_confirmed',
     lastVerifiedAt: daysAgo(5),
     observationIds: [],
+  },
+  {
+    id: 'place-canteen-2-test',
+    name: '南方科技大学第二学生餐厅',
+    coordinates: { x: 56, y: 44, lat: 22.601645, lng: 113.998573 },
+    category: '食堂',
+    accessibilityFeatures: ['轮椅坡道'],
+    currentStatus: 'pending',
+    lastVerifiedAt: daysAgo(0, 14, 56),
+    observationIds: ['obs-canteen-2-test'],
   },
 ];
 
 // --- 观察（含照片/时间/地点/标签/条款/核验状态） ---------------------------
 
 const OBSERVATIONS: Observation[] = [
+  {
+    id: 'obs-canteen-2-test',
+    placeId: 'place-canteen-2-test',
+    postId: 'post-canteen-2-test',
+    photo: rampPhoto,
+    capturedAt: daysAgo(0, 14, 56),
+    coordinates: { x: 56, y: 44, lat: 22.601645, lng: 113.998573 },
+    facilityType: 'ramp',
+    issueType: 'occupied',
+    description: '模拟测试观察：位置位于10栋（第二学生餐厅）南侧最底边，用于验证任意地点建档、地图选点与发布流程。照片和设施问题均为模拟，不代表现场真实状态。',
+    standardTags: ['#坡道', '#通道占用', '#需要复核'],
+    standardReferences: [findStandard('std-ramp-passage')],
+    aiConfidence: 0.88,
+    verificationStatus: 'pending',
+    reporterId: USERS.lin.userId,
+    reporterName: USERS.lin.name,
+    createdAt: daysAgo(0, 14, 57),
+    confirmations: [],
+    disputes: [],
+    remediationUpdates: [],
+  },
   {
     id: 'obs-ramp-001',
     placeId: 'place-library-east',
@@ -104,7 +138,7 @@ const OBSERVATIONS: Observation[] = [
     coordinates: { x: 31.5, y: 27.5 },
     facilityType: 'ramp',
     issueType: 'occupied',
-    description: '图书馆东门轮椅坡道的通行区域停了多辆共享单车，轮椅无法上行。',
+    description: '工学院入口轮椅坡道的通行区域停了多辆共享单车，轮椅无法上行（模拟观察）。',
     standardTags: ['#坡道', '#通道占用', '#需要复核'],
     standardReferences: [findStandard('std-ramp-passage')],
     aiConfidence: 0.88,
@@ -125,7 +159,7 @@ const OBSERVATIONS: Observation[] = [
     coordinates: { x: 29, y: 63 },
     facilityType: 'tactile_paving',
     issueType: 'blocked',
-    description: '第一食堂侧门盲道被纸箱和路锥占用，行进盲道中断约 4 米。',
+    description: '荔园餐厅附近盲道被纸箱和路锥占用，行进盲道中断约 4 米（模拟观察）。',
     standardTags: ['#盲道', '#通道阻挡', '#需要复核'],
     standardReferences: [findStandard('std-tactile-continuity')],
     aiConfidence: 0.91,
@@ -172,7 +206,7 @@ const OBSERVATIONS: Observation[] = [
     coordinates: { x: 71, y: 67 },
     facilityType: 'elevator',
     issueType: 'damaged',
-    description: '体育馆无障碍电梯外呼面板破损停用，缺少临时替代通道说明。',
+    description: '致诚书院无障碍电梯外呼面板破损停用，缺少临时替代通道说明（模拟观察）。',
     standardTags: ['#电梯', '#设施破损', '#需要复核'],
     standardReferences: [findStandard('std-elevator')],
     aiConfidence: 0.83,
@@ -190,12 +224,24 @@ const OBSERVATIONS: Observation[] = [
 
 const POSTS: Post[] = [
   {
+    id: 'post-canteen-2-test',
+    type: 'facility',
+    author: { id: USERS.lin.userId, name: USERS.lin.name, role: USERS.lin.role },
+    title: '第二学生餐厅10栋南侧 · 模拟测试观察',
+    content: '模拟测试观察：位置位于10栋南侧最底边。照片、设施问题和分析均为原型测试数据，不代表现场真实状态。',
+    images: [rampPhoto],
+    tags: ['#坡道', '#通道占用', '#需要复核'],
+    placeId: 'place-canteen-2-test',
+    observationId: 'obs-canteen-2-test',
+    createdAt: daysAgo(0, 14, 58),
+  },
+  {
     id: 'post-facility-ramp',
     type: 'facility',
     author: { id: USERS.lin.userId, name: USERS.lin.name, role: USERS.lin.role },
-    title: '图书馆东门坡道被共享单车占用，轮椅上不去',
+    title: '工学院入口坡道被共享单车占用，轮椅上不去',
     content:
-      '今天上午在图书馆东门看到，坡道通行区域停了三四辆共享单车，轮椅无法上行。已发布设施观察，等待附近志愿者现场复核。AI 模拟分析认为是“轮椅坡道 · 通道占用”，置信度 0.88。',
+      '模拟观察：工学院入口坡道通行区域停了三四辆共享单车，轮椅无法上行。已发布设施观察，等待独立复核。AI 模拟分析认为是“轮椅坡道 · 通道占用”，置信度 0.88。',
     images: [rampPhoto],
     tags: ['#坡道', '#通道占用', '#需要复核'],
     placeId: 'place-library-east',
@@ -274,7 +320,7 @@ const POSTS: Post[] = [
     id: 'post-facility-tactile',
     type: 'facility',
     author: { id: USERS.chen.userId, name: USERS.chen.name, role: USERS.chen.role },
-    title: '第一食堂侧门盲道被纸箱路锥阻挡',
+    title: '荔园餐厅附近盲道被纸箱路锥阻挡',
     content:
       '侧门外卖取餐点把纸箱和路锥放在盲道上，行进盲道中断约 4 米。两位志愿者现场确认后已标记“社区已复核”，希望取餐点改放到旁边空地。',
     images: [tactilePhoto],
@@ -289,6 +335,18 @@ const POSTS: Post[] = [
 
 const TIMELINE: TimelineEvent[] = [
   {
+    id: 'tl-canteen-2-test',
+    placeId: 'place-canteen-2-test',
+    observationId: 'obs-canteen-2-test',
+    type: 'observation_published',
+    actorId: USERS.lin.userId,
+    actorName: USERS.lin.name,
+    actorRole: 'volunteer',
+    message: '发布模拟测试观察：第二学生餐厅10栋南侧最底边',
+    statusAfter: 'pending',
+    createdAt: daysAgo(0, 14, 58),
+  },
+  {
     id: 'tl-gym-published',
     placeId: 'place-gym',
     observationId: 'obs-elevator-004',
@@ -296,7 +354,7 @@ const TIMELINE: TimelineEvent[] = [
     actorId: USERS.zhao.userId,
     actorName: USERS.zhao.name,
     actorRole: 'volunteer',
-    message: '发布设施观察：体育馆无障碍电梯面板破损停用',
+    message: '发布模拟设施观察：致诚书院无障碍电梯面板破损停用',
     statusAfter: 'pending',
     createdAt: daysAgo(45, 16, 12),
   },
@@ -406,7 +464,7 @@ const POINT_RECORDS: PointRecord[] = [
     userName: USERS.zhao.name,
     delta: 10,
     reason: 'observation_published',
-    detail: '发布一条有效设施观察（体育馆电梯）',
+    detail: '发布一条模拟设施观察（致诚书院电梯）',
     relatedObservationId: 'obs-elevator-004',
     createdAt: daysAgo(45, 16, 12),
   },
@@ -475,6 +533,7 @@ const POINT_RECORDS: PointRecord[] = [
 /** 构建一份全新的演示初始数据（resetDemoData 与首次启动使用） */
 export function buildSeedData(): AppData {
   return {
+    helpRequests: [],
     places: PLACES.map((place) => ({ ...place, observationIds: [...place.observationIds] })),
     posts: POSTS.map((post) => ({
       ...post,
@@ -491,6 +550,7 @@ export function buildSeedData(): AppData {
     })),
     timeline: TIMELINE.map((event) => ({ ...event })),
     pointRecords: POINT_RECORDS.map((record) => ({ ...record })),
+    redemptions: [],
     demoUsers: Object.values(USERS).map((user) => ({ ...user })),
     currentUserId: USERS.lin.userId,
     preferences: {
@@ -502,6 +562,7 @@ export function buildSeedData(): AppData {
       largeText: false,
       highContrast: false,
       voiceGuidance: false,
+      speechAssistance: false,
       reducedMotion: false,
     },
     privacySettings: {

@@ -173,6 +173,8 @@ export interface TimelineEvent {
 export interface Place {
   id: string;
   name: string;
+  /** 搜索来源的高德 POI 标识，用于复用同一地点档案。 */
+  amapPoiId?: string;
   coordinates: GeoCoordinates;
   /** 地点大类，如“图书馆 / 食堂 / 教学楼” */
   category: string;
@@ -184,6 +186,8 @@ export interface Place {
   currentStatus: VerificationStatus;
   lastVerifiedAt: string;
   observationIds: string[];
+  /** AI 地点场景配图，不属于现场观察或核验证据。 */
+  sceneImage?: string;
 }
 
 export interface PostAuthor {
@@ -205,6 +209,16 @@ export interface Post {
   placeId?: string;
   observationId?: string;
   createdAt: string;
+  /** 本机模拟互动，旧帖子缺省为空；与设施核验、积分无关。 */
+  likedBy?: string[];
+  comments?: PostComment[];
+}
+
+export interface PostComment {
+  id: string;
+  author: PostAuthor;
+  content: string;
+  createdAt: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -212,7 +226,7 @@ export interface Post {
 // ---------------------------------------------------------------------------
 
 /** 模拟身份：MVP 不做真实账号，通过身份切换演示志愿者与场所负责人 */
-export type SimulatedRole = 'volunteer' | 'lead_volunteer' | 'institution';
+export type SimulatedRole = 'disabled_person' | 'volunteer' | 'lead_volunteer' | 'institution';
 
 export interface SimulatedIdentity {
   userId: string;
@@ -231,6 +245,8 @@ export interface UserPreferences {
   largeText: boolean;
   highContrast: boolean;
   voiceGuidance: boolean;
+  /** 页面语音辅助，与导航语音分开；旧快照缺省为关闭。 */
+  speechAssistance?: boolean;
   reducedMotion: boolean;
 }
 
@@ -243,7 +259,18 @@ export interface PrivacySettings {
 export type PointReason =
   | 'observation_published'
   | 'verification_confirmed'
-  | 'remediation_posted';
+  | 'remediation_posted'
+  | 'reward_redeemed';
+
+export interface RewardRedemption {
+  id: string;
+  userId: string;
+  rewardId: string;
+  title: string;
+  cost: number;
+  status: 'demo_reserved' | 'review_pending';
+  createdAt: string;
+}
 
 export interface PointRecord {
   id: string;
@@ -304,6 +331,8 @@ export interface NavigationSessionState {
 
 export interface PublishObservationInput {
   placeId: string;
+  /** 未建立档案的地点随观察原子创建，placeId 留空。 */
+  newPlace?: { name: string; amapPoiId?: string };
   photo: string;
   capturedAt: string;
   coordinates: GeoCoordinates;
@@ -319,12 +348,29 @@ export type VerifyResult =
   | { ok: false; reason: 'already_voted' | 'not_found' | 'unavailable' };
 
 /** 完整应用状态快照（localStorage 持久化对象） */
+export interface HelpRequest {
+  id: string;
+  requesterId: string;
+  placeId: string;
+  need: string;
+  message: string;
+  status: 'pending' | 'accepted' | 'completed' | 'cancelled';
+  recipientIds: string[];
+  volunteerId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AppData {
+  /** 删除记录用于阻止演示数据迁移在刷新时重新补回帖子。 */
+  deletedPostIds?: string[];
+  helpRequests: HelpRequest[];
   places: Place[];
   posts: Post[];
   observations: Observation[];
   timeline: TimelineEvent[];
   pointRecords: PointRecord[];
+  redemptions: RewardRedemption[];
   demoUsers: SimulatedIdentity[];
   currentUserId: string;
   preferences: UserPreferences;
@@ -338,6 +384,8 @@ export interface AppData {
  * 完整方法清单与 TEAM_PLAN.md 保持一致，只做加法、不做语义变更。
  */
 export interface AppStore extends AppData {
+  createHelpRequest: (placeId: string, need: string, message: string) => void;
+  updateHelpRequest: (id: string, action: 'accept' | 'complete' | 'cancel') => void;
   // 派生/便利选择器
   currentUser: SimulatedIdentity;
   getPlace: (placeId: string) => Place | undefined;
@@ -345,8 +393,13 @@ export interface AppStore extends AppData {
   getObservationsForPlace: (placeId: string) => Observation[];
   getTimelineForPlace: (placeId: string) => TimelineEvent[];
   getUserPoints: (userId: string) => number;
+  redeemReward: (rewardId: string) => void;
   // 共享动作
   publishObservation: (input: PublishObservationInput) => Observation;
+  publishCommunityPost: (input: Pick<Post, 'title' | 'content' | 'images' | 'tags'> & { type: Exclude<PostType, 'facility'> }) => Post;
+  togglePostLike: (postId: string) => void;
+  addPostComment: (postId: string, content: string) => boolean;
+  deletePost: (postId: string) => boolean;
   verifyObservation: (
     observationId: string,
     vote: 'confirm' | 'dispute',

@@ -3,6 +3,7 @@ import { MAP_LEGEND_STATUSES, STATUS_META } from '../../../app/config';
 import type { CampusMapProps, PlaceMarkerVm } from '../contracts';
 import { CampusBasemap } from './CampusBasemap';
 import { StatusGlyph } from './StatusGlyph';
+import { facilityGlyphSvg, mapLayerLabel } from '../mapLayers';
 
 /**
  * 【临时适配器】本地模拟校园地图画布。
@@ -47,10 +48,13 @@ function clampView(view: MapView): MapView {
   };
 }
 
-export function TempCampusMap({ markers, onSelectPlace }: CampusMapProps) {
+export function TempCampusMap({ markers, onSelectPlace, routePlaceIds, onWalkingResult }: CampusMapProps) {
   const [view, setView] = useState<MapView>(FULL_VIEW);
   const selected = markers.find((marker) => marker.selected);
   const selectedId = selected?.placeId;
+  useEffect(() => {
+    if (routePlaceIds?.length) onWalkingResult?.({ status: 'error', message: '当前为离线或模拟底图，无法查询高德步行路线。' });
+  }, [routePlaceIds, onWalkingResult]);
 
   // 首页“在地图上查看”跳入（URL 带 placeId）时，自动聚焦并放大到选中地点
   useEffect(() => {
@@ -89,7 +93,7 @@ export function TempCampusMap({ markers, onSelectPlace }: CampusMapProps) {
         <title>本地模拟校园地图</title>
         <CampusBasemap />
 
-        {markers.map((marker) => {
+        {markers.filter((marker) => !marker.hidden).map((marker) => {
           const meta = STATUS_META[marker.status];
           const { px, py } = toPx(marker);
           const labelWidth = marker.name.length * 13 + 18;
@@ -99,10 +103,10 @@ export function TempCampusMap({ markers, onSelectPlace }: CampusMapProps) {
               className="map-marker"
               role="button"
               tabIndex={0}
-              aria-label={`${marker.name}，${meta.label}，按 Enter 查看地点详情`}
+              aria-label={`${marker.name}，${meta.label}，${(marker.visibleFacilities ?? []).map(mapLayerLabel).join('、')}，按 Enter 查看地点详情`}
               aria-current={marker.selected ? 'true' : undefined}
               transform={`translate(${px} ${py}) scale(${marker.selected ? 1.3 : 1})`}
-              style={{ color: `var(--tone-${meta.tone})` }}
+              style={{ color: marker.showInspection === false ? 'var(--tone-info)' : `var(--tone-${meta.tone})` }}
               onClick={() => onSelectPlace(marker.placeId)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -115,8 +119,16 @@ export function TempCampusMap({ markers, onSelectPlace }: CampusMapProps) {
               {marker.selected && <circle className="map-marker__ring" r="19" />}
               <circle className="map-marker__badge" r="13" />
               <g transform="translate(-7 -7)" style={{ color: '#ffffff' }}>
-                <StatusGlyph shape={meta.shape} size={14} />
+                {marker.showInspection === false && marker.visibleFacilities?.length
+                  ? <g dangerouslySetInnerHTML={{ __html: facilityGlyphSvg(marker.visibleFacilities[0]) }} />
+                  : <StatusGlyph shape={meta.shape} size={14} />}
               </g>
+              {(marker.visibleFacilities ?? []).slice(marker.showInspection === false ? 1 : 0).map((type, index) =>
+                <g key={type} transform={`translate(${18 + index * 20} -8)`}>
+                  <title>{mapLayerLabel(type)}</title><rect x="-2" y="-2" width="18" height="18" rx="3" fill="white" />
+                  <g dangerouslySetInnerHTML={{ __html: facilityGlyphSvg(type) }} />
+                </g>)}
+              {!!marker.visibleFacilities?.length && <text y="52" textAnchor="middle" fontSize="10">{marker.visibleFacilities.map(mapLayerLabel).join(' / ')}</text>}
               <g className="map-marker__label" transform="translate(0 32)">
                 <rect
                   x={-labelWidth / 2}

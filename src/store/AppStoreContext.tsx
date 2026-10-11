@@ -18,12 +18,20 @@ import type {
   VerifyResult,
 } from '../types';
 import { buildSeedData } from '../data';
+import { migrateStoredData } from './migrate';
+import { resolveObservationPlace } from './observationPlaces';
+import { createLocalHelp, transitionLocalHelp } from './helpRequests';
+import { applyRewardRedemption } from './rewards';
+import { getVerificationBlock } from './verification';
+import { appendPostComment, COMMENT_MAX_LENGTH, togglePostLike } from './postInteractions';
+import { deleteOwnedPost } from './deletePost';
 import {
   FACILITY_META,
   ISSUE_META,
   POINT_RULES,
   SIMULATION_LABELS,
   STORAGE_KEY,
+  STORAGE_VERSION,
   VERIFICATION_REQUIRED_CONFIRMATIONS,
 } from '../app/config';
 
@@ -39,29 +47,12 @@ function uid(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function looksLikeAppData(value: unknown): value is AppData {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  const candidate = value as Partial<AppData>;
-  return (
-    Array.isArray(candidate.places) &&
-    Array.isArray(candidate.posts) &&
-    Array.isArray(candidate.observations) &&
-    Array.isArray(candidate.timeline) &&
-    typeof candidate.currentUserId === 'string' &&
-    typeof candidate.preferences === 'object'
-  );
-}
-
 function loadInitialData(): AppData {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed: unknown = JSON.parse(raw);
-      if (looksLikeAppData(parsed)) {
-        return parsed;
-      }
+      return migrateStoredData(parsed, buildSeedData());
     }
   } catch {
     // 隐私模式 / 脏数据：回退种子数据，保证演示不白屏
@@ -107,7 +98,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   // 持久化：任意状态变化都写回 localStorage
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...data, schemaVersion: STORAGE_VERSION }));
     } catch {
       // 配额/隐私模式下静默降级为内存态
     }
@@ -191,13 +182,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
     const publishObservation: AppStore['publishObservation'] = (input) => {
       const now = new Date().toISOString();
-      const place = data.places.find((item) => item.id === input.placeId);
-      const facilityLabel = FACILITY_META[input.aiAnalysis.facilityType].short;
+      const place = resolveObservationPlace(data.places, input, uid('place'));
+      const facilityLabel = FACILITY_META[input.facilityType].short;
       const issueLabel = ISSUE_META[input.issueType];
 
       const observation: Observation = {
         id: uid('obs'),
-        placeId: input.placeId,
+        placeId: place.id,
         photo: input.photo,
         capturedAt: input.capturedAt,
         coordinates: input.coordinates,
@@ -223,6 +214,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
       setData((prev) => {
         const next = structuredClone(prev);
+        if (!next.places.some((item) => item.id === place.id)) next.places.push(structuredClone(place));
         const obs = { ...observation, id: observation.id } as Observation;
         next.observations.unshift(obs);
 
@@ -238,7 +230,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
           content: `${input.description}（${SIMULATION_LABELS.aiAnalysis}，结果仅供辅助，须由志愿者复核。）`,
           images: [input.photo],
           tags: obs.standardTags,
-          placeId: input.placeId,
+          placeId: place.id,
           observationId: obs.id,
           createdAt: now,
         });
@@ -246,7 +238,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
         next.timeline.unshift({
           id: uid('tl'),
-          placeId: input.placeId,
+          placeId: place.id,
           observationId: obs.id,
           type: 'observation_published',
           actorId: currentUser.userId,
@@ -266,7 +258,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         );
         refreshPlace(
           next.places,
-          input.placeId,
+          place.id,
           next.observations,
         );
         return next;
@@ -281,8 +273,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         return { ok: false, reason: 'not_found' };
       }
       if (
-        observation.verificationStatus === 'resolved' ||
-        observation.verificationStatus === 'institution_confirmed'
+        currentUser.role === 'institution' ||
+        !['pending', 'community_verified', 'stale'].includes(observation.verificationStatus)
       ) {
         return { ok: false, reason: 'unavailable' };
       }
@@ -298,7 +290,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       // 返回值不能依赖在更新函数中赋值）
       const willPromote =
         vote === 'confirm' &&
-        observation.verificationStatus === 'pending' &&
+        ['pending', 'stale'].includes(observation.verificationStatus) &&
         observation.confirmations.length + 1 >= VERIFICATION_REQUIRED_CONFIRMATIONS;
       const resultStatus: VerificationStatus = willPromote
         ? 'community_verified'
@@ -307,9 +299,11 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       setData((prev) => {
         const next = structuredClone(prev);
         const obs = next.observations.find((item) => item.id === observationId);
-        if (!obs) {
+        if (!obs || getVerificationBlock(obs, currentUser)) {
           return prev;
         }
+        const promote = vote === 'confirm' && ['pending', 'stale'].includes(obs.verificationStatus) &&
+          obs.confirmations.length + 1 >= VERIFICATION_REQUIRED_CONFIRMATIONS;
         const now = new Date().toISOString();
         const voteRecord = {
           userId: currentUser.userId,
@@ -338,7 +332,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
           createdAt: now,
         });
 
-        if (willPromote) {
+        if (promote) {
           obs.verificationStatus = 'community_verified';
           next.timeline.unshift({
             id: uid('tl'),
@@ -501,7 +495,32 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       getObservationsForPlace,
       getTimelineForPlace,
       getUserPoints,
+      redeemReward: (rewardId) => {
+        const id = uid('reward');
+        const createdAt = new Date().toISOString();
+        setData((prev) => applyRewardRedemption(prev, rewardId, id, createdAt));
+      },
       publishObservation,
+      deletePost: (postId) => {
+        if (!data.posts.some((post) => post.id === postId && post.author.id === currentUser.userId)) return false;
+        setData((prev) => deleteOwnedPost(prev, postId));
+        return true;
+      },
+      togglePostLike: (postId) => setData((prev) => togglePostLike(prev, postId, currentUser.userId)),
+      addPostComment: (postId, content) => {
+        const trimmed = content.trim();
+        if (!trimmed || trimmed.length > COMMENT_MAX_LENGTH || !data.posts.some((post) => post.id === postId)) return false;
+        const comment = { id: uid('comment'), content: trimmed,
+          author: { id: currentUser.userId, name: currentUser.name, role: currentUser.role },
+          createdAt: new Date().toISOString() };
+        setData((prev) => appendPostComment(prev, postId, comment));
+        return true;
+      },
+      publishCommunityPost: (input) => {
+        const post = { ...input, id: uid('post'), author: { id: currentUser.userId, name: currentUser.name, role: currentUser.role }, createdAt: new Date().toISOString() };
+        setData((prev) => ({ ...prev, posts: [post, ...prev.posts] }));
+        return post;
+      },
       verifyObservation,
       addRemediationUpdate,
       requestRecheck,
@@ -529,6 +548,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         });
       },
       updatePreferences,
+      createHelpRequest: (placeId, need, message) => setData((prev) => createLocalHelp(prev,
+        { id: uid('help'), placeId, need, message, now: new Date().toISOString() })),
+      updateHelpRequest: (id, action) => setData((prev) => transitionLocalHelp(prev, id, action, new Date().toISOString())),
       updatePrivacySettings,
       switchUser,
       resetDemoData,

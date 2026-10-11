@@ -9,7 +9,8 @@
  * 在成员组件合入前，src/features/journey/components/ 下的最小临时适配器
  * （Temp*）实现同一契约，仅用于贯通主线，合入后删除。
  */
-import type { Post, VerificationStatus } from '../../types';
+import type { FacilityType, Post, VerificationStatus } from '../../types';
+import type { WalkingState } from './walking';
 
 // --- 成员 A：设施帖卡片 -----------------------------------------------------
 
@@ -39,9 +40,16 @@ export interface PlaceMarkerVm {
   status: VerificationStatus;
   /** 是否为当前选中地点（来自 URL 查询参数），选中针放大并加描边 */
   selected: boolean;
+  facilityTypes?: FacilityType[];
+  visibleFacilities?: FacilityType[];
+  showInspection?: boolean;
+  hidden?: boolean;
 }
 
 export interface CampusMapProps {
+  /** 高德步行规划起终点 ID（两个）；不使用虚构途经点。 */
+  routePlaceIds?: string[];
+  onWalkingResult?: (state: WalkingState) => void;
   /** 一个地点恰好一个大头针；多次观察不生成新针 */
   markers: PlaceMarkerVm[];
   /** 事件：选择大头针（键盘 Enter/Space 与点击均应触发） */

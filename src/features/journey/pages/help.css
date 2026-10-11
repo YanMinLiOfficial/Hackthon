@@ -1,0 +1,13 @@
+.help-page { max-width: 880px; margin: auto; display: grid; gap: 20px; }
+.help-page h2 { font-size: 2rem; margin: 8px 0; }
+.help-warning { padding: 16px; border-left: 4px solid currentColor; background: var(--color-surface-2); line-height: 1.7; }
+.help-panel { padding: 22px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 20px; display: grid; gap: 14px; }
+.help-panel h3, .help-panel p { margin: 0; line-height: 1.7; }
+.help-panel label { display: grid; gap: 8px; line-height: 1.6; }
+.help-panel select, .help-panel textarea { width: 100%; padding: 12px; font: inherit; color: var(--color-text); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; }
+.help-panel .help-confirm { display: flex; align-items: flex-start; gap: 10px; }
+.help-confirm input { margin-top: 6px; }
+.help-panel button { min-height: 44px; padding: 12px 18px; border-radius: 12px; border: 1px solid var(--color-border); font: inherit; background: var(--color-surface-2); color: var(--color-text); cursor: pointer; }
+.help-panel button:disabled { opacity: .6; cursor: not-allowed; }
+.help-request { padding: 16px 0; border-top: 1px solid var(--color-border); overflow-wrap: anywhere; }
+.help-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }

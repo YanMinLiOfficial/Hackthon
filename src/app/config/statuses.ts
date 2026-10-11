@@ -4,7 +4,7 @@ import type { VerificationStatus } from '../../types';
  * 核验状态元数据。地图大头针同时使用 tone（颜色）与 shape（图形）双重编码，
  * 并始终配合文字标签：状态表达不能只依赖颜色。
  */
-export type StatusTone = 'warning' | 'success' | 'info' | 'attention' | 'neutral' | 'resolved';
+export type StatusTone = 'pending' | 'warning' | 'success' | 'info' | 'attention' | 'neutral' | 'resolved';
 export type MarkerShape =
   | 'pin-ring' // 空心圆：待核验
   | 'pin-dot' // 实心圆：社区已复核
@@ -24,7 +24,7 @@ export const STATUS_META: Record<VerificationStatus, StatusMeta> = {
   pending: {
     label: '待核验',
     description: '新观察，等待不同志愿者独立复核',
-    tone: 'warning',
+    tone: 'pending',
     shape: 'pin-ring',
   },
   community_verified: {

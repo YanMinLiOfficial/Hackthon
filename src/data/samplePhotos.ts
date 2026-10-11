@@ -1,7 +1,8 @@
-// 发布页“选择示例照片”素材（成员 C 消费）。全部为本地 SVG，离线可用。
-import elevatorPhoto from '../assets/sample-photo-elevator.svg';
-import parkingPhoto from '../assets/sample-photo-parking.svg';
-import signagePhoto from '../assets/sample-photo-signage.svg';
+// 发布页示例照片：复用本地 AI 生成高保真配图，离线可用，非现场采集。
+import elevatorPhoto from '../assets/generated-tool-elevator.png';
+import tactilePhoto from '../assets/generated-tactile.png';
+import restroomPhoto from '../assets/generated-restroom.png';
+import rampPhoto from '../assets/generated-ramp.png';
 
 export interface SamplePhoto {
   id: string;
@@ -10,7 +11,8 @@ export interface SamplePhoto {
 }
 
 export const SAMPLE_PHOTOS: readonly SamplePhoto[] = [
-  { id: 'sample-elevator', label: '电梯按钮照片', src: elevatorPhoto },
-  { id: 'sample-parking', label: '无障碍停车位照片', src: parkingPhoto },
-  { id: 'sample-signage', label: '走廊导向标识照片', src: signagePhoto },
+  { id: 'sample-ramp', label: '坡道被共享单车占用', src: rampPhoto },
+  { id: 'sample-tactile', label: '盲道被纸箱与路锥阻挡', src: tactilePhoto },
+  { id: 'sample-restroom', label: '无障碍卫生间场景', src: restroomPhoto },
+  { id: 'sample-elevator', label: '电梯现场记录场景', src: elevatorPhoto },
 ] as const;

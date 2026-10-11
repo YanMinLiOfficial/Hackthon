@@ -26,8 +26,12 @@ export const AI_DISCLAIMER = 'AI 结果仅供辅助，须由志愿者现场复�
 
 /**
  * 高德 JS API Key 预留入口（在 .env.local 配置 VITE_AMAP_API_KEY）。
- * MVP 不联网：未配置时地图适配器自动使用本地 SVG 校园地图。
+ * 配置了 Key 时使用南科大真实地图；未配置或加载失败时回退本地 SVG 模拟地图。
  */
 export const AMAP_API_KEY: string = import.meta.env.VITE_AMAP_API_KEY?.trim() ?? '';
+
+/** 高德安全密钥（新版 Key 必须，配 securityJsCode） */
+export const AMAP_SECURITY_CODE: string =
+  import.meta.env.VITE_AMAP_SECURITY_CODE?.trim() ?? '';
 
 export const MAP_PROVIDER: 'local-svg' | 'amap' = AMAP_API_KEY ? 'amap' : 'local-svg';

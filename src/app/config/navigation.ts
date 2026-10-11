@@ -1,6 +1,6 @@
 /** 底部导航集中配置（首页是默认入口；地图是核心频道但不是首页） */
 
-export type NavIcon = 'home' | 'map' | 'publish' | 'ai' | 'me';
+export type NavIcon = 'home' | 'map' | 'publish' | 'ai' | 'me' | 'ranking' | 'help';
 
 export interface NavItem {
   path: string;
@@ -15,5 +15,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/map', label: '地图', icon: 'map' },
   { path: '/publish', label: '发布', icon: 'publish' },
   { path: '/ask-ai', label: '问 AI', icon: 'ai' },
+  { path: '/help', label: '求助', icon: 'help' },
+  { path: '/leaderboard', label: '贡献榜', icon: 'ranking' },
   { path: '/me', label: '我的', icon: 'me' },
 ] as const;

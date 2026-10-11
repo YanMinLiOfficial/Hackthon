@@ -31,7 +31,8 @@ export function formatConfidence(confidence: number): string {
 }
 
 export const ROLE_LABELS: Record<SimulatedRole, string> = {
+  disabled_person: '残障人士',
   volunteer: '志愿者',
-  lead_volunteer: '骨干志愿者',
-  institution: '场所负责人',
+  lead_volunteer: '志愿者',
+  institution: '官方人士',
 };

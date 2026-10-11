@@ -2,7 +2,8 @@
  * M1 主线业务派生：从唯一共享仓库 useAppStore() 取数，
  * 页面控制器与临时适配器只消费这里的结果，不重复实现筛选/聚合逻辑。
  */
-import type { AppStore, Place, VerificationStatus } from '../../types';
+import type { AppStore, FacilityType, Place, VerificationStatus } from '../../types';
+import { FACILITY_META } from '../../app/config';
 import type { PlaceMarkerVm } from './contracts';
 
 export interface FacilityPostVm {
@@ -53,5 +54,12 @@ export function selectPlaceMarkers(
     lng: place.coordinates.lng,
     status: place.currentStatus,
     selected: place.id === selectedPlaceId,
+    facilityTypes: Array.from(new Set([
+      ...(Object.keys(FACILITY_META) as FacilityType[]).filter((type) =>
+        place.accessibilityFeatures.some((feature) => feature === FACILITY_META[type].label ||
+          feature === FACILITY_META[type].short || (type === 'elevator' && feature === '无障碍电梯'))),
+      ...store.observations.filter((observation) => observation.placeId === place.id && observation.issueType !== 'missing')
+        .map((observation) => observation.facilityType),
+    ])),
   }));
 }
