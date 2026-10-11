@@ -1,0 +1,154 @@
+/*
+ * 校园地图画布样式（成员 B 所有，src/features/map/）。
+ * 仅使用 src/app/theme.css 的主题令牌，类名统一 cnm- 前缀，
+ * 不与 src/features/journey/journey.css 的临时地图样式共用类名。
+ */
+
+.cnm-panel {
+  margin: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-card);
+}
+
+.cnm-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #e9f0e6;
+}
+
+/* --- 装饰底图 ------------------------------------------------------------ */
+
+.cnm-base__ground {
+  fill: #e9f0e6;
+}
+
+.cnm-base__road-h,
+.cnm-base__road-v {
+  fill: none;
+  stroke: #f6f4ee;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.cnm-base__plaza {
+  fill: #f2f6f2;
+}
+
+.cnm-base__plaza-ring {
+  fill: none;
+  stroke: #d9e2d9;
+  stroke-width: 1.2;
+  stroke-dasharray: 2.4 1.6;
+}
+
+.cnm-base__lawn {
+  fill: #cfe3cf;
+}
+
+.cnm-base__water {
+  fill: #cfe0ec;
+}
+
+.cnm-base__building rect {
+  fill: #dce1e9;
+  stroke: #c3cad4;
+  stroke-width: 0.6;
+}
+
+.cnm-base__trees circle {
+  fill: #b6d3b2;
+}
+
+/* --- 模拟标注 ------------------------------------------------------------ */
+
+.cnm-sim-badge rect {
+  fill: rgba(255, 255, 255, 0.88);
+  stroke: var(--color-border);
+  stroke-width: 0.4;
+}
+
+.cnm-sim-badge text {
+  font-size: 2.8px;
+  fill: var(--color-text-muted);
+}
+
+.cnm-empty {
+  font-size: 3.4px;
+  fill: var(--color-text-muted);
+}
+
+/* --- 大头针 -------------------------------------------------------------- */
+
+.cnm-marker {
+  cursor: pointer;
+}
+
+/* SVG <g> 上 outline 跨浏览器不稳定，用命中圆承载清晰焦点指示 */
+.cnm-marker:focus-visible {
+  outline: none;
+}
+
+.cnm-marker__hit {
+  fill: transparent;
+}
+
+.cnm-marker:focus .cnm-marker__hit {
+  fill: rgba(11, 92, 173, 0.12);
+}
+
+.cnm-marker:focus-visible .cnm-marker__hit {
+  fill: rgba(11, 92, 173, 0.18);
+  stroke: var(--color-focus);
+  stroke-width: 0.9;
+}
+
+.cnm-marker__tail {
+  fill: currentColor;
+}
+
+.cnm-marker__badge {
+  fill: currentColor;
+  stroke: var(--color-surface);
+  stroke-width: 1.2;
+}
+
+.cnm-marker__glyph {
+  color: var(--color-surface);
+}
+
+.cnm-marker__name {
+  font-size: 2.8px;
+  fill: var(--color-text);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 0.7px;
+  stroke-linejoin: round;
+}
+
+/* --- 状态图例 ------------------------------------------------------------ */
+
+.cnm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+}
+
+.cnm-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.cnm-legend__glyph {
+  display: inline-flex;
+}
