@@ -1,12 +1,12 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../../../store';
-import { TempCampusMap } from '../components/TempCampusMap';
+import { CampusMap } from '../../map';
 import { selectPlaceMarkers } from '../selectors';
 
 /**
  * 地图频道（页面控制由项目负责人所有）。
  * 读取 ?placeId 作为选中针来源（首页“在地图上查看”跳入）；
- * 选择大头针进入地点详情。底图/标记/图例视觉组件最终由成员 B 交付。
+ * 选择大头针进入地点详情。底图/标记/图例视觉组件由成员 B 在 src/features/map/ 交付。
  */
 export function MapPage() {
   const store = useAppStore();
@@ -31,7 +31,7 @@ export function MapPage() {
         用 Tab 键在大头针间移动，按 Enter 打开地点详情；也可直接点击或触摸。
       </p>
 
-      <TempCampusMap
+      <CampusMap
         markers={markers}
         onSelectPlace={(placeId) => navigate(`/places/${placeId}`)}
       />
