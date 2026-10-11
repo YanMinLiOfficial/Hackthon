@@ -33,6 +33,9 @@ export interface PlaceMarkerVm {
   /** 本地 SVG 地图上的百分比坐标 0-100（由 Place.coordinates 透传） */
   x: number;
   y: number;
+  /** 真实经纬度（高德地图用；GCJ-02，缺省时高德组件跳过该针） */
+  lat?: number;
+  lng?: number;
   status: VerificationStatus;
   /** 是否为当前选中地点（来自 URL 查询参数），选中针放大并加描边 */
   selected: boolean;

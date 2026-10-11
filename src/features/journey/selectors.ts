@@ -49,6 +49,8 @@ export function selectPlaceMarkers(
     name: place.name,
     x: place.coordinates.x,
     y: place.coordinates.y,
+    lat: place.coordinates.lat,
+    lng: place.coordinates.lng,
     status: place.currentStatus,
     selected: place.id === selectedPlaceId,
   }));

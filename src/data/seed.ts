@@ -43,7 +43,7 @@ const PLACES: Place[] = [
   {
     id: 'place-library-east',
     name: '图书馆东门',
-    coordinates: { x: 30, y: 26 },
+    coordinates: { x: 30, y: 26, lat: 22.59796, lng: 113.99337 },
     category: '图书馆',
     accessibilityFeatures: ['轮椅坡道', '无障碍出入口'],
     currentStatus: 'pending',
@@ -53,7 +53,7 @@ const PLACES: Place[] = [
   {
     id: 'place-canteen',
     name: '第一食堂侧门',
-    coordinates: { x: 28, y: 62 },
+    coordinates: { x: 28, y: 62, lat: 22.59951, lng: 113.99289 },
     category: '食堂',
     accessibilityFeatures: ['盲道', '无障碍出入口'],
     currentStatus: 'community_verified',
@@ -63,7 +63,7 @@ const PLACES: Place[] = [
   {
     id: 'place-teaching-3',
     name: '第三教学楼',
-    coordinates: { x: 64, y: 30 },
+    coordinates: { x: 64, y: 30, lat: 22.598, lng: 113.9945 },
     category: '教学楼',
     accessibilityFeatures: ['无障碍卫生间', '无障碍电梯'],
     currentStatus: 'institution_confirmed',
@@ -73,7 +73,7 @@ const PLACES: Place[] = [
   {
     id: 'place-gym',
     name: '体育馆',
-    coordinates: { x: 70, y: 68 },
+    coordinates: { x: 70, y: 68, lat: 22.60466, lng: 113.99922 },
     category: '体育场馆',
     accessibilityFeatures: ['无障碍电梯', '无障碍出入口'],
     currentStatus: 'stale',
@@ -83,7 +83,7 @@ const PLACES: Place[] = [
   {
     id: 'place-student-center',
     name: '学生活动中心',
-    coordinates: { x: 50, y: 50 },
+    coordinates: { x: 50, y: 50, lat: 22.6019, lng: 113.9936 },
     category: '活动中心',
     accessibilityFeatures: ['无障碍出入口', '无障碍停车位'],
     currentStatus: 'institution_confirmed',
