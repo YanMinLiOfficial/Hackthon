@@ -184,17 +184,115 @@
   font-size: 0.85rem;
 }
 
+.map-canvas {
+  position: relative;
+}
+
 .campus-map {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background: #e8f0e8;
+  background: #eaf0e8;
   display: block;
 }
 
+/* 左上缩放控制（HTML 按钮叠在 SVG 上，天然键盘可达） */
+.map-controls {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  display: grid;
+  gap: 6px;
+}
+
+.map-controls button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--color-text);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: var(--shadow-card);
+}
+
+.map-controls button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.map-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 右下悬浮图例面板（可折叠） */
+.map-legend-panel {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  font-size: 0.82rem;
+  max-width: 46%;
+}
+
+.map-legend-panel summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: var(--space-2) var(--space-3);
+  list-style-position: inside;
+  border-radius: var(--radius-md);
+}
+
+.map-legend-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--space-3) var(--space-2);
+  display: grid;
+  gap: 6px;
+}
+
+.map-legend-panel li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* 大头针：实心圆徽章（底色=状态色，内部白色状态图形，名称药丸标签） */
 .map-marker {
   cursor: pointer;
+  filter: drop-shadow(0 1px 2px rgba(20, 30, 45, 0.35));
+}
+
+.map-marker__badge {
+  fill: currentColor;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+}
+
+.map-marker__ring {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.map-marker__label rect {
+  fill: rgba(255, 255, 255, 0.94);
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+.map-marker__label text {
+  fill: var(--color-text);
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 /* SVG <g> 上 outline 跨浏览器不稳定，用命中圆做清晰焦点指示；
@@ -214,32 +312,7 @@
 .map-marker:focus-visible .map-marker__hit {
   fill: rgba(11, 92, 173, 0.18);
   stroke: var(--color-focus);
-  stroke-width: 0.9;
-}
-
-.map-marker__name {
-  font-size: 2.6px;
-  fill: var(--color-text);
-  paint-order: stroke;
-  stroke: #ffffff;
-  stroke-width: 0.7px;
-  stroke-linejoin: round;
-}
-
-.map-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  margin-top: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-}
-
-.map-legend__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  color: var(--color-text);
+  stroke-width: 2;
 }
 
 /* --- 地点详情与时间线 ---------------------------------------------------- */
