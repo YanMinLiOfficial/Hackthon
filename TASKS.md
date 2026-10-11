@@ -23,7 +23,7 @@
 ### M1 发现与地点档案
 
 - [ ] **成员 A**：通用帖子卡片、类型筛选及科普/工具/经验内容展示组件。
-- [ ] **成员 B**：模拟地图画布、状态图例、至少 5 个地点大头针及选择回调。
+- [x] **成员 B**：模拟地图画布、状态图例、至少 5 个地点大头针及选择回调。
 - [x] **项目负责人**：实现首页主线设施帖、帖子与地图互跳、地点详情、唯一大头针和观察时间线（M1 主线切片；成员 A/B 组件以临时适配器+契约方式接入，见工作记录）
 
 ### M2 发布、分析与复核
@@ -68,3 +68,4 @@
 | 2026-10-10 | M0：路由、底部导航、主题应用与应用骨架 | `src/app/`：BrowserRouter 五频道路由、固定底部导航（图标+文字+激活指示条，aria-current）、sticky 页头与全局原型徽标、五个 M0 占位页（标注负责成员与里程碑，不提前实现成员页面）；“我的”占位提供模拟身份切换与演示数据重置便于联调；浏览器冒烟：五页可达、身份切换/积分/重置/localStorage 写入/键盘 Tab 焦点均正常，无控制台报错；`npm run dev` 与 `npm run build` 通过。**M0 全部完成** |
 | 2026-10-10 | 调整 M1–M4 分工 | 项目负责人直接拥有完整核心旅程和业务状态；A/B/C 改为交付社区/无障碍、地图/导航视觉、AI/上传/质量检查等辅助组件 |
 | 2026-10-10 | M1 主线切片：首页设施帖→地图→地点详情→时间线（lead/core-integration） | 提交 525a947 契约/选择器、de200c8 首页临时帖卡、84a7777 临时校园地图（5 针唯一/三编码/键盘可选）、1bd68cd 地点详情与观察时间线、1a9ad1a 焦点环修复；均在 `src/features/journey/`，未改成员目录与共享类型；浏览器冒烟全链路通过（3 帖/5 针/食堂 3 条时间线/非法 id 兜底/返回路径）；npm run build 通过。成员 A/B 交付物：满足 `contracts.ts`（FacilityPostCardProps、CampusMapProps）后替换 Temp 适配器；筛选/科普工具内容、正式地图视觉仍待 A/B |
+| 2026-10-11 | M1 成员 B：正式校园地图画布（feature/map-navigation） | 新建 `src/features/map/`：CampusMap（纯内联 SVG 底图、5 个地点针、颜色+图形+文字三重编码、点击与 Tab+Enter/Space 选择、选中放大+虚线圈 aria-current、模拟标注、空态）、MapLegend、map.css（`cnm-` 前缀仅用主题令牌）；满足 `journey/contracts.ts` 的 CampusMapProps，复用 STATUS_META 与 StatusGlyph，不读 store 不建第二套状态；MapPage 切换正式组件并删除 TempCampusMap（经成员授权）；npm run build 通过（78 模块）；浏览器冒烟：5 针 aria-label 正确、5 图例、本地模拟标注可见、Tab+Enter 进入地点详情、帖→地图互跳 aria-current 恰好 1、无控制台错误、无外部/失败请求。遗留：journey.css 临时地图样式块待负责人清理（`.map-panel__hint` 仍被 MapPage 使用需保留） |
